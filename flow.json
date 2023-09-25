@@ -8,6 +8,13 @@
 		"testnet": "access.devnet.nodes.onflow.org:9000"
 	},
 	"accounts": {
+		"DI": {
+			"address": "ae426e1c2ff439bc",
+			"key": {
+				"type": "file",
+				"location": "DI.pkey"
+			}
+		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": {
@@ -15,6 +22,5 @@
 				"location": "./emulator.key"
 			}
 		}
-	},
-	"deployments": {}
+	}
 }
