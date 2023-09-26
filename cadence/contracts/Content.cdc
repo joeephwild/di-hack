@@ -9,10 +9,15 @@ pub contract ContentContract {
   pub var description: String
   pub var shortDesc: String
   pub var isPremium: Bool
+
+  in
  }
 
     // define the array to store the Content
     pub var allContent: [Content]
+
+    //dictinary to  map an address to a content
+    pub var addressToContent: {Content: Address}
 
     init(){
       self.allContent = []
@@ -25,7 +30,9 @@ pub contract ContentContract {
       price_: UInt64,
       description_: String,
       shortDesc_: String
-    ){}
+    ){
+       self.allContent.append(data)
+    }
 
     //function to purchase the content 
     pub fun payForContent(contentId: UInt64){}
