@@ -28,8 +28,12 @@ pub contract Lancet {
             //transfering the u pdated resource back to 'from'
             from <- updatedFrom
 
-            let recipient: PublicAccount = getAccount(to)
-            recipient.withdraw(amount)
+            // let recipient: PublicAccount = getAccount(to)
+            // recipient.withdraw(amount)
+            let recipient: &(FungibleToken.Receiver) = to.borrow<&(FungibleToken.Receiver)>(from: /storage/LancetReceiver)
+                ?? panic("Recipient does not support FungibleToken.Receiver")
+            
+            recipient.deposit(from: <-create FungibleToken.DepositVault(amount: amount))
         } else {
             panic("Insufficient balance")
         }
@@ -39,6 +43,21 @@ pub contract Lancet {
         return token.balance
     }
 
+    // function to mint new Lancet tokens (for the admin)
+    pub fun mintTokens(amount: Int) {
+        let admin = getAccount(0xAdminAddress)
+        let recipient: &(FungibleToken.Receiver) = admin.borrow<&(FungibleToken.Receiver)>(from: /storage/LancetReceiver)
+            ?? panic("Admin does not support FungibleToken.Receiver")
+        recipient.deposit(from: <-create FungibleToken.DepositVault(amount: amount))
+    }
+
+    pub fun burnTokens(amount:Int) {
+        let admin = getAccount(0xAdminAddress)
+        let recipient: &(FungibleToken.Receiver) = admin.borrow<&(FungibleToken.Receiver)>(from: /storage/LancetReceiver)
+            ?? panic("Admin does not support FungibleToken.Receiver")
+
+        recipient.withdraw(amount)
+    }
 
 
 }

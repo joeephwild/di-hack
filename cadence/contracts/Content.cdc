@@ -10,15 +10,15 @@ pub contract ContentContract {
         pub var shortDesc: String
         pub var isPremium: Bool
 
-        init(){
-         self.id = 0
-         self.owner = 0x0
-         self.category = ""
-         self.file = ""
-         self.price = 0
-         self.description = ""
-         self.shortDesc = ""
-         self.isPremium = false
+        init(id: UInt64, owner: Address, category: String, file: String, price: UInt64, description: String, shortDesc: String, isPremium: Bool) {
+            self.id = id
+            self.owner = owner
+            self.category = category
+            self.file = file
+            self.price = price
+            self.description = description
+            self.shortDesc = shortDesc
+            self.isPremium = isPremium
         }
     }
 
@@ -49,8 +49,14 @@ pub contract ContentContract {
         isPremium_: Bool
     ) {
         let content = Content(
-         id: _id,
-         
+            id: id_,
+            owner: owner_,
+            category: category_,
+            file: file_,
+            price: price_,
+            description: description_,
+            shortDesc: shortDesc_,
+            isPremium: isPremium_
         )
         self.allContent.append(content)
         self.addressToContent[owner_] = content
@@ -58,6 +64,34 @@ pub contract ContentContract {
 
     // Function to purchase the content 
     pub fun payForContent(contentId: UInt64) {
-        // Implement your logic here
+        let content = self.get(contentId: contentId)
+        if let content = content {
+            // Ensure the content isn't already owned by the user
+            if content.owner != self.signer {
+                // Payment logic here
+            } else {
+                // This should signify the content is owned by the caller
+            }
+        } else {
+            // Implementation of content not available
+        }
+    }
+
+    // Function to get the content by ID
+    pub fun get(contentId: UInt64): &Content? {
+        if contentId < UInt64(self.allContent.length) {
+            return &self.allContent[contentId]
+        }
+        return nil
+    }
+
+    // Function to list all available content
+    pub fun listAllContent(): [Content] {
+        return self.allContent
+    }
+
+    // Function to list all premium items
+    pub fun listPremiumContent(): [Content] {
+        return self.allContent.filter({ $0.isPremium })
     }
 }
