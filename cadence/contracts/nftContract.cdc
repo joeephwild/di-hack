@@ -1,10 +1,10 @@
 // importing the flow module
 import FlowToken from 0xToken
-import FungibleToken from FungibleToken
 
 pub contract NftContract {
     pub struct NFT {
         pub var id: UInt64
+        pub var image: String
         pub var owner: Address
         pub var taskName: String
         pub var taskCompleted: Bool
@@ -14,13 +14,15 @@ pub contract NftContract {
     pub var nfts: [NFT]
 
     // initialize
-    init() {
+    init(_image: String) {
         self.nfts = []
+
+        self.image = _image
     }
 
     // function to create a new NFT and assign to the caller
-    pub fun mintNFT(taskName: String) {
-        let newNFT = NFT(id: UInt64(self.nfts.length), owner: self.signer, taskName: taskName taskCompleted: false)
+    pub fun mintNFT(taskName: String, image: String) {
+        let newNFT = NFT(id: UInt64(self.nfts.length), owner: self.signer, _image: image, taskName: taskName taskCompleted: false)
         self.nfts.append(newNFT)
     }
 
@@ -29,6 +31,8 @@ pub contract NftContract {
         let nftRef = self.getNFTByID(nftID)
         if nftRef.owner == self.signer {
             nftRef.taskCompleted = true
+            // automatically update the task name when the task is completed
+            nftRef.taskName = "Yay, You Rock!"
         }
     }
 

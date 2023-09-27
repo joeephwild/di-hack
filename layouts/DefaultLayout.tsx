@@ -1,10 +1,10 @@
-import Navbar from '../components/Navbar'
+import { Sidebar } from '../components'
 
 export default function DefaultLayout({ children }) {
   return (
-    <>
-      <Navbar />
+    <div className='flex items-start'>
+      <Sidebar />
       <main>{children}</main>
-    </>
+    </div>
   )
 }

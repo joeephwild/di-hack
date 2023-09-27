@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply font-Epilogue-VariableFont bg-Grey/50 text-[#fff] overflow-hidden;
+}
+
+@font-face {
+  font-family: "Epilogue-VariableFont";
+  src: url("../assets/fonts/Epilogue-VariableFont_wght.ttf");
+}
