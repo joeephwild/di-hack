@@ -1,5 +1,6 @@
 // importing the flow module
-import FlowToken from ae426e1c2ff439bc
+import FlowToken from 0xToken
+import FungibleToken from FungibleToken
 
 pub contract NftContract {
     pub struct NFT {
