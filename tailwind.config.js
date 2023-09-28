@@ -15,13 +15,18 @@ module.exports = {
         Black: "#0C0B0B",
         Grey: "#98A2B3",
         "Shade/White": "#FFFFFF",
-        "Grey/50":"#F9FAFB"
+        "Grey/50": "#F9FAFB",
+        "Grey/900": "#101928",
+        Orange: "#FF8C42",
       },
       colors: {
         Accent: "#30F2A1",
         Black: "#0C0B0B",
         Grey: "#98A2B3",
         "Shade/White": "#FFFFFF",
+        "Grey/50": "#F9FAFB",
+        "Grey/900": "#101928",
+        Orange: "#FF8C42",
       },
       fontFamily: {
         "Epilogue-VariableFont": ["Epilogue-VariableFont", "Inter"],
