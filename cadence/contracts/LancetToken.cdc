@@ -20,23 +20,43 @@ pub contract Lancet {
 
     pub fun transfer(from: @Token, to: Address, amount: Int) {
 
-        if from.balance >= amount {
-        //creating a new Token resource with the updated balance
-            let newBalance = from.balance - amount
-            let updatedFrom <- from.with(balance: newBalance)
+        // if from.balance >= amount {
+        // //creating a new Token resource with the updated balance
+        //     let newBalance = from.balance - amount
 
-            //transfering the u pdated resource back to 'from'
-            from <- updatedFrom
+        //     let updatedFrom <- from.with(balance: newBalance)
 
-            // let recipient: PublicAccount = getAccount(to)
-            // recipient.withdraw(amount)
-            let recipient: &(FungibleToken.Receiver) = to.borrow<&(FungibleToken.Receiver)>(from: /storage/LancetReceiver)
-                ?? panic("Recipient does not support FungibleToken.Receiver")
+        //     //transfering the u pdated resource back to 'from'
+        //     from <- updatedFrom
+
+        //     // let recipient: PublicAccount = getAccount(to)
+        //     // recipient.withdraw(amount)
+        //     let recipient: &(FungibleToken.Receiver) = to.borrow<&(FungibleToken.Receiver)>(from: /storage/LancetReceiver)
+        //         ?? panic("Recipient does not support FungibleToken.Receiver")
             
-            recipient.deposit(from: <-create FungibleToken.DepositVault(amount: amount))
-        } else {
+        //     recipient.deposit(from: <-create FungibleToken.DepositVault(amount: amount))
+        // } else {
+        //     panic("Insufficient balance")
+        // }
+        let newBalance = from.balance - amount
+
+        if newBalance < 0 {
+            // insufficient balance
             panic("Insufficient balance")
         }
+
+        //creating a new token resource with the updated balance
+        let updatedFrom <- from.with(balance: newBalance)
+
+        // Transferring the updated resource back to from
+        from <- updatedFrom
+
+        // Let recipient: PublicAccount = getAccount(to)
+        // recipient.withdraw(amount)
+        let recipient: &(FungibleToken.Receiver) = to.borrow<&(FungibleToken.Receiver)>(from: /storage/LancetReceiver)
+            ?? panic("Recipient does not support FungibleToken.Receiver")
+
+        recipient.deposit(from: <-create FungibleToken.DepositVault(amount: amount))
     }
 
     pub fun getBalance(token: &Token): Int {
