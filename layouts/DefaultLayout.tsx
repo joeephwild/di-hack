@@ -4,7 +4,7 @@ export default function DefaultLayout({ children }) {
   return (
     <div className='flex items-start'>
       <Sidebar />
-      <main>{children}</main>
+      <main className='w-full'>{children}</main>
     </div>
   )
 }

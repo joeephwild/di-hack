@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import { logo } from "../assets/images";
 import { SidebarTab } from "../utils";
 import { useRouter } from "next/router";
+import { useFlow } from "../context/FlowContext";
 
 const Sidebar = () => {
-  const [active, setActive] = useState("learn");
+  const { setActive, active } = useFlow();
   const route = useRouter();
 
   const handleRoute = (item: string, routePath: string) => {
@@ -40,7 +41,13 @@ const Sidebar = () => {
                 active === item.active ? "text-Accent" : "text-Grey"
               } h-[20px] w-[20px] object-contain`}
             />
-            <span className={`${active === item.active ? "text-[#fff]" : "text-Grey"}`}>{item.name}</span>
+            <span
+              className={`${
+                active === item.active ? "text-[#fff]" : "text-Grey"
+              }`}
+            >
+              {item.name}
+            </span>
           </div>
         ))}
       </div>

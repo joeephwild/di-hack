@@ -1,4 +1,11 @@
-import { HomeIcon, MicrophoneIcon, UserGroupIcon, CpuChipIcon, ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/solid";
+import {
+  HomeIcon,
+  MicrophoneIcon,
+  UserGroupIcon,
+  ChipIcon,
+  ChatAlt2Icon,
+} from "@heroicons/react/solid";
+import { podcast1, podcast2, podcast3, profile } from "../assets/images";
 
 export const SidebarTab = [
   {
@@ -20,15 +27,88 @@ export const SidebarTab = [
     route: "/",
   },
   {
-    name: "Ai Test",
-    icons: CpuChipIcon,
+    name: "Learn with AI",
+    icons: ChipIcon,
     active: "test",
-    route: "/",
+    route: "/aiTest",
   },
   {
     name: "Chat",
-    icons: ChatBubbleBottomCenterTextIcon,
+    icons: ChatAlt2Icon,
     active: "chat",
     route: "/",
+  },
+];
+
+export const mentors = [
+  {
+    image: profile,
+    name: "Ariana Bush",
+  },
+  {
+    image: profile,
+    name: "Ariana Bush",
+  },
+  {
+    image: profile,
+    name: "Ariana Bush",
+  },
+  {
+    image: profile,
+    name: "Ariana Bush",
+  },
+
+  {
+    image: profile,
+    name: "Ariana Bush",
+  },
+  {
+    image: profile,
+    name: "Ariana Bush",
+  },
+];
+
+export const Podcast = [
+  {
+    name: "Awesome Tech Talks",
+    author: "Tech Enthusiast Productions",
+    audio_file: "https://example.com/awesome_tech_talks_episode1.mp3",
+    image: podcast1,
+    desc: "Explore the rich tapestry of French culture through the enchanting world of la belle langue française.",
+  },
+  {
+    name: "Awesome Tech Talks",
+    author: "Tech Enthusiast Productions",
+    audio_file: "https://example.com/awesome_tech_talks_episode1.mp3",
+    image: podcast2,
+    desc: "Explore the rich tapestry of French culture through the enchanting world of la belle langue française.",
+  },
+  {
+    name: "Awesome Tech Talks",
+    author: "Tech Enthusiast Productions",
+    audio_file: "https://example.com/awesome_tech_talks_episode1.mp3",
+    image: podcast3,
+    desc: "Explore the rich tapestry of French culture through the enchanting world of la belle langue française.",
+  },
+  {
+    name: "Awesome Tech Talks",
+    author: "Tech Enthusiast Productions",
+    audio_file: "https://example.com/awesome_tech_talks_episode1.mp3",
+    image: podcast1,
+    desc: "Explore the rich tapestry of French culture through the enchanting world of la belle langue française.",
+  },
+  {
+    name: "Awesome Tech Talks",
+    author: "Tech Enthusiast Productions",
+    audio_file: "https://example.com/awesome_tech_talks_episode1.mp3",
+    image: podcast2,
+    desc: "Explore the rich tapestry of French culture through the enchanting world of la belle langue française.",
+  },
+  {
+    name: "Awesome Tech Talks",
+    author: "Tech Enthusiast Productions",
+    audio_file: "https://example.com/awesome_tech_talks_episode1.mp3",
+    image: podcast3,
+    desc: "Explore the rich tapestry of French culture through the enchanting world of la belle langue française.",
   },
 ];
