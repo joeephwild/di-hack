@@ -1,4 +1,4 @@
-import FungibleToken from 0x0
+import FungibleToken from 0xToken
 
 pub contract Lancet {
 
