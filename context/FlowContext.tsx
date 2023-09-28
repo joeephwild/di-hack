@@ -8,12 +8,14 @@ type FlowContextType = {
   currentUser: any;
   logIn: (emailAddress: string) => Promise<void>;
   logOut: () => void;
-  setActive: React.Dispatch<React.SetStateAction<string>>
-  active: string
+  setActive: React.Dispatch<React.SetStateAction<string>>;
+  active: string;
+  modalOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 // Create the context with default values
-const FlowContext = createContext<FlowContextType | undefined>(undefined)
+const FlowContext = createContext<FlowContextType | undefined>(undefined);
 
 // Custom hook to use the Flow context
 export const useFlow = () => useContext(FlowContext);
@@ -22,6 +24,7 @@ export const useFlow = () => useContext(FlowContext);
 export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [active, setActive] = useState("learn");
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Log in function
   const logIn = async (emailAddress: string) => {
@@ -57,7 +60,9 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
         logIn,
         logOut,
         setActive,
-        active
+        active,
+        modalOpen,
+        setModalOpen,
       }}
     >
       {children}
