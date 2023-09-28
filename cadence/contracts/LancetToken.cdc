@@ -59,5 +59,4 @@ pub contract Lancet {
         recipient.withdraw(amount)
     }
 
-
 }
