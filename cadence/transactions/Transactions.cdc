@@ -2,6 +2,7 @@ import NftContract from 0xNftContract
 import ContentContract from 0xContentContract
 import Lancet from 0xLancet
 import UserProfileContract from 0xUserProfileContract
+import MentorContract from 0xMentorContract
 
 transaction(taskName: String, image: String) {
     prepare(acct: AuthAccount) {
@@ -85,5 +86,33 @@ transaction createUserProfile(username: String) {
     }
     execute {
         log("User profile created with UserProfileContract")
+    }
+}
+
+// mentor upload content sscript
+transaction(title: String, price: UInt64) {
+    let mentorContractRef: &MentorContract.Contract
+    prepare(signer: AuthAccount) {
+        // Get a reference to the MentorContract
+        self.mentorContractRef = signer.borrow<&MentorContract.Contract>(from: /storage/MentorContract)
+            ?? panic("MentorContract not found in storage")
+    }
+    execute {
+        // Call the uploadContent function to upload mentor's content
+        self.mentorContractRef.uploadContent(title: title, price: price)
+    }
+}
+
+// mentor withdraw earning script
+transaction(contentId: UInt64) {
+    let mentorContractRef: &MentorContract.Contract
+    prepare(signer: AuthAccount) {
+        // Get a reference to the MentorContract
+        self.mentorContractRef = signer.borrow<&MentorContract.Contract>(from: /storage/MentorContract)
+            ?? panic("MentorContract not found in storage")
+    }
+    execute {
+        // Call the withdrawEarnings function to withdraw earnings for a specific content
+        self.mentorContractRef.withdrawEarnings(contentId: contentId)
     }
 }

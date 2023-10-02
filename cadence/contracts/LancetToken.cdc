@@ -10,7 +10,7 @@ pub contract Lancet {
         }
     }
 
-    //initialising the contract with an empty colelction of tokens
+    //initialising the contract with an empty collection of tokens
     pub init() {}
 
 
