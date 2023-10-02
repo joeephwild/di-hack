@@ -8,7 +8,7 @@ const IntroCard = () => {
   const route = useRouter();
 
   const handleRoute = () => {
-    route.push("/aiTest");
+    route.push("/quiz");
     setActive("test");
   };
   return (

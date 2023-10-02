@@ -7,7 +7,7 @@ const DashboardLeft = () => {
   return (
     <div className="space-y-[53px]">
       <div className="flex flex-col space-y-[16px] items-start">
-        <span>Your NFT Badges</span>
+        <span className="text-Black">Your NFT Badges</span>
         <div className="flex items-center w-full gap-[33px]">
           {badges.slice(0, 3).map((item, i) => (
             <NfTBadge key={i} />

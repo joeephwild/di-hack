@@ -2,15 +2,17 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    domains: ["images.pexels.com"], // Add the "images" configuration here
+  },
   webpack: (config) => {
-    
     config.module.rules.push({
       test: /\.cdc$/,
-      loader: "raw-loader",
-    })
+      use: "raw-loader", // Change "loader" to "use" and remove the brackets
+    });
 
     return config;
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

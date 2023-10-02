@@ -6,12 +6,12 @@ import Image from "next/image";
 import { book, korean, profile } from "../assets/images";
 import { BellIcon } from "@heroicons/react/solid";
 import ConnectModal from "./ConnectModal";
+import Link from "next/link";
 
 export default function Navbar() {
   const user = useCurrentUser();
   // Get the initializeWeb3 function from the Web3 context
   const { logIn, currentUser, modalOpen, setModalOpen } = useFlow();
-  console.log(currentUser);
   return (
     <div>
       <div className="flex items-center justify-between w-full border-b border-Grey pt-[17px] pb-[14px] px-[14px]">
@@ -28,7 +28,8 @@ export default function Navbar() {
 
           {currentUser && (
             <div className="flex items-center space-x-10 w-full">
-              <button className="bg-Orange/50 flex space-x-[10px] items-center py-[10px] px-[24px]">
+              <Link href="/beAMentor">
+              <button className="bg-Orange/50 text-Orange flex space-x-[10px] items-center py-[10px] px-[24px]">
                 <Image
                   src={book}
                   alt="book"
@@ -36,6 +37,7 @@ export default function Navbar() {
                 />
                 Become a mentor
               </button>
+              </Link>
 
               <Image
                 src={korean}
@@ -49,10 +51,12 @@ export default function Navbar() {
                 <Image
                   src={profile}
                   alt="profile"
-                  className="w-[20px] h-[20px] object-cover rounded-full"
+                  className="w-[20px] h-[20px] text-Black object-cover rounded-full"
                 />
-                {currentUser.publicAddress.slice(0, 6)}...{" "}
-                {currentUser.publicAddress.slice(10, 18)}
+                <span className="text-Black">
+                  {currentUser.publicAddress.slice(0, 6)}...{" "}
+                  {currentUser.publicAddress.slice(10, 18)}
+                </span>
               </button>
             </div>
           )}

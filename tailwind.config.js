@@ -18,6 +18,7 @@ module.exports = {
         "Grey/50": "#F9FAFB",
         "Grey/900": "#101928",
         Orange: "#FF8C42",
+        "Gray 5": "#E0E0E0",
       },
       colors: {
         Accent: "#30F2A1",
@@ -27,6 +28,7 @@ module.exports = {
         "Grey/50": "#F9FAFB",
         "Grey/900": "#101928",
         Orange: "#FF8C42",
+        "Gray 5": "#E0E0E0",
       },
       fontFamily: {
         "Epilogue-VariableFont": ["Epilogue-VariableFont", "Inter"],

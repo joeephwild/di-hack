@@ -29,7 +29,7 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
   // Log in function
   const logIn = async (emailAddress: string) => {
     await magic.auth.loginWithMagicLink({ email: emailAddress });
-    const currentUser = await magic.user.getMetadata();
+    const currentUser = await magic.user.getInfo();
     setCurrentUser(currentUser);
   };
 
@@ -44,7 +44,7 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
     const getCurrentUser = async () => {
       const res = await magic.user.isLoggedIn();
       if (res) {
-        const user = await magic.user.getMetadata();
+        const user = await magic.user.getInfo();
         setCurrentUser(user);
       } else {
         setCurrentUser(null);

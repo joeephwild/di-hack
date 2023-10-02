@@ -4,18 +4,15 @@ import DefaultLayout from "../layouts/DefaultLayout";
 // Import FCL config
 import "../config/fcl";
 import { FlowProvider, useFlow } from "../context/FlowContext";
+import { UserProvider } from "../context/UserContext";
 // import { UserProvider } from "../context/UserContext";
 
 function MyApp({ Component, pageProps }) {
-
   return (
     <FlowProvider>
-      <DefaultLayout>
-
-        {/* <UserProvider> */}
-        <Component {...pageProps} />
-        {/* </UserProvider> */}
-      </DefaultLayout>
+      <UserProvider>
+      <Component {...pageProps} />
+      </UserProvider>
     </FlowProvider>
   );
 }
