@@ -1,6 +1,11 @@
 {
 	"contracts": {
-		"HelloWorld": "cadence/contracts/HelloWorld.cdc"
+		"Content": "cadence/contracts/Content.cdc",
+		"LancetToken": "cadence/contracts/LancetToken.cdc",
+		"NftContract": "cadence/contracts/NftContract.cdc",
+		"UserProfileContract": "cadence/contracts/UserProfileContract.cdc",
+		"MentorsContract": "cadence/contracts/MentorsContract.cdc"
+
 	},
 	"networks": {
 		"emulator": "127.0.0.1:3569",

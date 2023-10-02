@@ -1,3 +1,5 @@
+import LancetToken from 0xLancetToken
+
 pub contract ContentContract {
     // Struct to hold the info of very content
     pub struct Content {
@@ -62,19 +64,53 @@ pub contract ContentContract {
         self.addressToContent[owner_] = content
     }
 
-    // Function to purchase the content 
-    pub fun payForContent(contentId: UInt64) {
+    // // Function to purchase the content 
+    // pub fun payForContent(contentId: UInt64) {
+    //     let content = self.get(contentId: )
+    //     if let content = content {
+    //         // Ensure the content isn't already owned by the user
+    //         if content.owner != self.signer {
+    //             // Payment logic here
+    //         } else {
+    //             // This should signify the content is owned by the caller
+    //         }
+    //     } else {
+    //         // Implementation of content not available
+    //     }
+    // }
+    pub fun payForContent(contentId: UInt64, paymentAmount: UInt64) {
         let content = self.get(contentId: contentId)
-        if let content = content {
-            // Ensure the content isn't already owned by the user
-            if content.owner != self.signer {
-                // Payment logic here
-            } else {
-                // This should signify the content is owned by the caller
-            }
-        } else {
-            // Implementation of content not available
+
+         if content == nil {
+        // Content with the specified ID doesn't exist
+            panic("Content not available")
         }
+
+        if content!.owner == self.signer {
+            // Content is already owned by the caller
+            panic("Content is already owned by the caller")
+        }
+
+        if paymentAmount < content!.price {
+            // Insufficient payment amount
+            panic("Insufficient payment amount")
+        }
+
+        // perform the Lancet transfer logic
+        let lancetRef = getAccount(self.signer)
+            .getCapability<&Lancet.Vault{FungibleToken.Receiver}>(
+                /public/LancetReceiver
+            )
+            .borrow()
+            ?? panic("Could not borrow Lancet receiver receiver")
+
+        lancetRef.deposit(from: <-create Lancet.DepositVault(amount: paymentAmount))
+        lancetRef.withdraw(amount: paymentAmount, target: content!.owner)
+
+        // update the owner of the content
+        content!.owner = self.signer
+
+        log("Content purchased successfully")
     }
 
     // Function to get the content by ID
