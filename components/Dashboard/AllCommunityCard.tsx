@@ -26,10 +26,10 @@ const AllCommunitiesCard = ({
         </div>
         <div className="flex flex-col pl-[8px] items-center">
           <div className="flex items-center">
-            <span>The Koreos</span>
+            <span className="text-Black">The Koreos</span>
             <Image src={korean} alt="korean" className="w-[24px] h-[16px]" />
           </div>
-          <span>1507 members</span>
+          <span className="text-Grey">1507 members</span>
           <button className="bg-black text-Accent flex items-center py-2 px-4 ml-auto rounded-lg">
             <span className="mr-2 text-[12px]">Join community</span>
             <PlusCircleIcon className="w-4 h-4" />

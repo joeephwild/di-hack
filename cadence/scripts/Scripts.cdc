@@ -42,3 +42,14 @@ pub fun getUserProfile(username: String): UserProfileContract.UserProfile {
 
     return userProfileContractRef.getProfile(username: username)
 }
+
+// script to get mentor's content
+pub fun getMentorContents(account: Address): [MenorContract.MentorContent] {
+    let mentorContractRef = getAccount(account)
+        .getCapability<&MenorContract.Contract{MentorContract.MentorContentCollection}> (
+            /public/MentorContractCollection
+        )
+        .borrow()
+        ?? panic("Could not borrow MentorContract reference")
+    return mentorContractRef.getMentorContents()
+}

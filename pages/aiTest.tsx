@@ -1,7 +1,11 @@
 import React from "react";
+import DefaultLayout from "../layouts/DefaultLayout";
+import Navbar from "../components/Navbar";
 
 const aiTest = () => {
-  return <div>aiText</div>;
+  return <DefaultLayout>
+    <Navbar />
+  </DefaultLayout>;
 };
 
 export default aiTest;

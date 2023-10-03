@@ -3,7 +3,8 @@
 		"Content": "cadence/contracts/Content.cdc",
 		"LancetToken": "cadence/contracts/LancetToken.cdc",
 		"NftContract": "cadence/contracts/NftContract.cdc",
-		"UserProfileContract": "cadence/contracts/UserProfileContract.cdc"
+		"UserProfileContract": "cadence/contracts/UserProfileContract.cdc",
+		"MentorsContract": "cadence/contracts/MentorsContract.cdc"
 
 	},
 	"networks": {

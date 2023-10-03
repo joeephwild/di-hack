@@ -12,7 +12,7 @@ const AllMentorCard = () => {
             alt={item.name}
             className="w-[48px] h-[48px]"
           />
-          <span>{item.name}</span>
+          <span className="text-Black">{item.name}</span>
         </div>
       ))}
     </div>
