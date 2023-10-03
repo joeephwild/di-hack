@@ -9,7 +9,6 @@ const IntroCard = () => {
 
   const handleRoute = () => {
     route.push("/quiz");
-    setActive("test");
   };
   return (
     <div className="bg-Grey/900 p-[40px] w-[700px] h-[150px] rounded-[8px]">

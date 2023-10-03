@@ -76,7 +76,7 @@ const Communities = () => {
           {/* Main Content ends */}
           <div className="w-[12%] flex flex-col items-center bg-Grey/10 h-screen">
             {selectedCommunity?.Members.map((item, i) => (
-              <div className="mt-[41px]">
+              <div key={i} className="mt-[41px]">
                 <span className="text-Grey">Mentors</span>
                 {item.role === "Mentor" && (
                   <div className="text-Black mt-4 flex items-center space-x-9">
