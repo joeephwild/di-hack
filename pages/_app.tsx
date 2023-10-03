@@ -12,6 +12,7 @@ function MyApp({ Component, pageProps }) {
     <FlowProvider>
       <UserProvider>
       <Component {...pageProps} />
+      <ChatApp />
       </UserProvider>
     </FlowProvider>
   );
