@@ -1,4 +1,3 @@
-// MagicLinkPage.js
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import firebase from './firebase'; // Import your Firebase configuration

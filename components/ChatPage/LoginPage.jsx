@@ -1,39 +1,27 @@
-// MagicLinkPage.js
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import firebase from './firebase'; // Import your Firebase configuration
+import React, { useState } from 'react';
+import { sendMagicLinkEmail } from './emailService'; // Your email service function
 
-function MagicLinkPage() {
-  const router = useRouter();
-  const { magicToken } = router.query;
+function LoginPage() {
+  const [email, setEmail] = useState('');
 
-  useEffect(() => {
-    if (magicToken) {
-      // Authenticate the user using Firebase Authentication
-      firebase
-        .auth()
-        .signInWithEmailLink('', magicToken)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          // Redirect the user to the chat page or a desired location
-          router.push('/chat');
-        })
-        .catch((error) => {
-          console.error(error.message);
-          // Handle authentication error, e.g., invalid token
-          router.push('/login'); // Redirect back to the login page
-        });
-    } else {
-      // No magic token found, redirect to the login page
-      router.push('/login');
-    }
-  }, [magicToken, router]);
+  const handleMagicLinkRequest = () => {
+    // Send a magic link to the provided email address
+    sendMagicLinkEmail(email);
+    // You can display a success message or redirect the user
+  };
 
   return (
-    <div>
-      {/* You can display a loading indicator or a message here */}
+    <div className="login-container">
+      <h2>Login with Magic Link</h2>
+      <input
+        type="email"
+        placeholder="Enter your email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button onClick={handleMagicLinkRequest}>Request Magic Link</button>
     </div>
   );
 }
 
-export default MagicLinkPage;
+export default LoginPage;
