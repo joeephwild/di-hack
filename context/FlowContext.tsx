@@ -12,6 +12,7 @@ type FlowContextType = {
   active: string;
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  openWallet: () => Promise<void>;
 };
 
 // Create the context with default values
@@ -28,15 +29,33 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Log in function
   const logIn = async (emailAddress: string) => {
-    await magic.auth.loginWithMagicLink({ email: emailAddress });
-    const currentUser = await magic.user.getInfo();
-    setCurrentUser(currentUser);
+    try {
+      await magic.auth.loginWithMagicLink({ email: emailAddress });
+      const currentUser = await magic.user.getInfo();
+      setCurrentUser(currentUser);
+    } catch (error) {
+      alert("error connectting wallet");
+      console.error(error);
+    }
   };
 
   // Log out function
   const logOut = async () => {
-    await magic.user.logout();
-    setCurrentUser(null);
+    try {
+      await magic.user.logout();
+      setCurrentUser(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const openWallet = async () => {
+    try {
+      const res = await magic.wallet.showUI();
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Effect to initialize Magic when the component mounts
@@ -46,8 +65,6 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
       if (res) {
         const user = await magic.user.getInfo();
         setCurrentUser(user);
-      } else {
-        setCurrentUser(null);
       }
     };
     getCurrentUser();
@@ -63,6 +80,7 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
         active,
         modalOpen,
         setModalOpen,
+        openWallet,
       }}
     >
       {children}

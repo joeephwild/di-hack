@@ -31,7 +31,7 @@ export const SidebarTab = [
     name: "Podcast",
     icons: MicrophoneIcon,
     active: "podcast",
-    route: "/",
+    route: "/podcast",
   },
   {
     name: "Communities",
@@ -43,7 +43,7 @@ export const SidebarTab = [
     name: "Learn with AI",
     icons: ChipIcon,
     active: "test",
-    route: "/quiz",
+    route: "/aichat",
   },
   {
     name: "Chat",
@@ -225,56 +225,100 @@ export const quizDataKoreanToEnglish = [
   {
     question: "Translate the following sentence to English:",
     sentenceKorean: "고양이는 집에 있어요.",
-    options: ["The cat is at the store.", "The dog is outside.", "The cat is at home.", "The cat is on the tree."],
+    options: [
+      "The cat is at the store.",
+      "The dog is outside.",
+      "The cat is at home.",
+      "The cat is on the tree.",
+    ],
     correctAnswer: "The cat is at home.",
   },
   {
     question: "Translate the following sentence to English:",
     sentenceKorean: "오늘 날씨가 좋아요.",
-    options: ["Today is Monday.", "Tomorrow will be rainy.", "The weather is nice today.", "I am going to the park."],
+    options: [
+      "Today is Monday.",
+      "Tomorrow will be rainy.",
+      "The weather is nice today.",
+      "I am going to the park.",
+    ],
     correctAnswer: "The weather is nice today.",
   },
   {
     question: "Translate the following sentence to English:",
     sentenceKorean: "나는 한국 음식을 좋아해요.",
-    options: ["I like Chinese food.", "I don't like pizza.", "I like Korean food.", "I prefer Italian cuisine."],
+    options: [
+      "I like Chinese food.",
+      "I don't like pizza.",
+      "I like Korean food.",
+      "I prefer Italian cuisine.",
+    ],
     correctAnswer: "I like Korean food.",
   },
   {
     question: "Translate the following sentence to English:",
     sentenceKorean: "저는 책을 읽고 있어요.",
-    options: ["I am watching TV.", "I am reading a book.", "I am cooking dinner.", "I am going to the park."],
+    options: [
+      "I am watching TV.",
+      "I am reading a book.",
+      "I am cooking dinner.",
+      "I am going to the park.",
+    ],
     correctAnswer: "I am reading a book.",
   },
   {
     question: "Translate the following sentence to English:",
     sentenceKorean: "우리 가족은 함께 저녁 식사를 합니다.",
-    options: ["My family has breakfast together.", "My family has lunch at school.", "My family has dinner together.", "My family goes to the beach."],
+    options: [
+      "My family has breakfast together.",
+      "My family has lunch at school.",
+      "My family has dinner together.",
+      "My family goes to the beach.",
+    ],
     correctAnswer: "My family has dinner together.",
   },
   {
     question: "Translate the following sentence to English:",
     sentenceKorean: "나는 일곱 시에 일어납니다.",
-    options: ["I wake up at seven.", "I go to bed at seven.", "I eat breakfast at seven.", "I have a meeting at seven."],
+    options: [
+      "I wake up at seven.",
+      "I go to bed at seven.",
+      "I eat breakfast at seven.",
+      "I have a meeting at seven.",
+    ],
     correctAnswer: "I wake up at seven.",
   },
   {
     question: "Translate the following sentence to English:",
     sentenceKorean: "저는 여름 휴가를 즐겼어요.",
-    options: ["I enjoyed my summer vacation.", "I am planning a winter trip.", "I don't like holidays.", "I am working during the summer."],
+    options: [
+      "I enjoyed my summer vacation.",
+      "I am planning a winter trip.",
+      "I don't like holidays.",
+      "I am working during the summer.",
+    ],
     correctAnswer: "I enjoyed my summer vacation.",
   },
   {
     question: "Translate the following sentence to English:",
     sentenceKorean: "이 공원은 아름답습니다.",
-    options: ["This park is closed.", "This park is crowded.", "This park is beautiful.", "This park is far away."],
+    options: [
+      "This park is closed.",
+      "This park is crowded.",
+      "This park is beautiful.",
+      "This park is far away.",
+    ],
     correctAnswer: "This park is beautiful.",
   },
   {
     question: "Translate the following sentence to English:",
     sentenceKorean: "우리는 친구들과 함께 축구를 합니다.",
-    options: ["We watch a movie.", "We play soccer with friends.", "We go shopping.", "We eat at a restaurant."],
+    options: [
+      "We watch a movie.",
+      "We play soccer with friends.",
+      "We go shopping.",
+      "We eat at a restaurant.",
+    ],
     correctAnswer: "We play soccer with friends.",
   },
 ];
-

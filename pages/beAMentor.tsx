@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import { XIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 
-const beAMentor = () => {
+const BeAMentor = () => {
   const route = useRouter();
   return (
     <>
@@ -95,4 +95,4 @@ const beAMentor = () => {
   );
 };
 
-export default beAMentor;
+export default BeAMentor;
