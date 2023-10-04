@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
-    "@magic-ext/flow": "^15.0.3",
+    "@magic-ext/flow": "^15.1.1",
     "@onflow/fcl": "1.4.1",
     "@onflow/typedefs": "1.1.0",
     "firebase": "^10.4.0",
