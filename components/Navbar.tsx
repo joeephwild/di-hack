@@ -11,7 +11,7 @@ import Link from "next/link";
 export default function Navbar() {
   const user = useCurrentUser();
   // Get the initializeWeb3 function from the Web3 context
-  const { logIn, currentUser, modalOpen, setModalOpen } = useFlow();
+  const { logIn, currentUser, modalOpen, setModalOpen, openWallet } = useFlow();
   return (
     <div>
       <div className="flex items-center justify-between w-full border-b border-Grey pt-[17px] pb-[14px] px-[14px]">
@@ -29,25 +29,30 @@ export default function Navbar() {
           {currentUser && (
             <div className="flex items-center space-x-10 w-full">
               <Link href="/beAMentor">
-              <button className="bg-Orange/50 text-Orange flex space-x-[10px] items-center py-[10px] px-[24px]">
-                <Image
-                  src={book}
-                  alt="book"
-                  className="w-[20px] h-[20px] object-contain"
-                />
-                Become a mentor
-              </button>
+                <button className="bg-Orange/50 text-Orange flex space-x-[10px] items-center py-[10px] px-[24px]">
+                  <Image
+                    src={book}
+                    alt="book"
+                    className="w-[20px] h-[20px] object-contain"
+                  />
+                  Become a mentor
+                </button>
               </Link>
 
-              <Image
-                src={korean}
-                alt="language"
-                className="w-[35.2px] h-[24px] object-contain"
-              />
+              <Link href="/profileOnboarding">
+                <Image
+                  src={korean}
+                  alt="language"
+                  className="w-[35.2px] h-[24px] object-contain"
+                />
+              </Link>
 
               <BellIcon className="text-[#667185] w-[28px]" />
 
-              <button className="flex items-center space-x-[10px]">
+              <button
+                onClick={openWallet}
+                className="flex items-center space-x-[10px]"
+              >
                 <Image
                   src={profile}
                   alt="profile"

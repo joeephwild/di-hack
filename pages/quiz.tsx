@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { useFlow } from "../context/FlowContext";
 import Image from "next/image";
 import { badges } from "../assets/images";
+import { FailedModal, WinModal } from "../components/quiz";
 
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -23,13 +24,13 @@ const Quiz = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(false);
+  const [failed, setFailed] = useState(false);
   const route = useRouter();
   const { setActive } = useFlow();
 
   useEffect(() => {
     if (gameOver) {
-      setActive("podcast");
-      route.push("/podcast"); // Replace with the actual route to your podcast page
+      setFailed(true);
     }
   }, [gameOver]);
 
@@ -44,6 +45,7 @@ const Quiz = () => {
 
       if (lives < 1) {
         setGameOver(true);
+        setFailed(true);
       }
     }
   };
@@ -77,6 +79,13 @@ const Quiz = () => {
         {showModal && (
           <WinModal
             closeModal={() => setShowModal(false)}
+            actionButton={() => {}}
+          />
+        )}
+
+        {failed && (
+          <FailedModal
+            closeModal={() => setFailed(false)}
             actionButton={() => {}}
           />
         )}
@@ -131,6 +140,7 @@ const Quiz = () => {
             {question.options?.map((item, i) => (
               <button
                 key={i}
+                disabled={lives < 0}
                 className={`text-Black text-[24px] font-medium w-[40%] flex item-center justify-center border-2 py-[20px]   ${
                   selectedAnswer === item.toLowerCase() && correctAnswer
                     ? "border-green-500 text-green-500"
@@ -159,39 +169,6 @@ const Quiz = () => {
       </div>
       {/* <QuizModal showModal={showModal} onClose={() => setShowModal(false)} /> */}
     </DefaultLayout>
-  );
-};
-
-const WinModal = ({ closeModal, actionButton }) => {
-  return (
-    <div className="w-[30%] bg-white px-12 py-12 rounded-2xl absolute left-[40%] top-[20%]">
-      <div className="flex w-full justify-between">
-        <h1 className="text-2xl font-semibold">Congratulations🎉 </h1>
-        <div>
-          <button onClick={closeModal}>
-            <XIcon className="w-[20px] h-[20px] bg-Grey/20 text-white " />
-          </button>
-        </div>
-      </div>
-      <div className="my-8 w-full">
-        <p className="text-gray-400 text-xl w-[85%]">
-          You completed this Level, claim your NFT badge below
-        </p>
-      </div>
-
-      <div className="border border-1 rounded-2xl mb-4 flex flex-col justify-center items-center space-y-4 py-4">
-        <Image src={badges} alt="badge" width={150} height={150} />
-        <p className="text-xl font-bold">Level 1 Korean Badge</p>
-      </div>
-      <div className="w-full mt-8">
-        <button
-          className="bg-Accent w-full text-center rounded font-semibold py-4"
-          onClick={actionButton}
-        >
-          Claim your NFT Badge
-        </button>
-      </div>
-    </div>
   );
 };
 

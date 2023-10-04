@@ -22,7 +22,7 @@ const IntroCard = () => {
 
         <button
           onClick={handleRoute}
-          className="bg-Accent py-[10px] px-[24px] rounded-[8px]"
+          className="bg-Accent text-Black py-[10px] px-[24px] rounded-[8px]"
         >
           Start quiz
         </button>
