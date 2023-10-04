@@ -11,11 +11,15 @@ const ConnectModal = () => {
   const route = useRouter();
   console.log(currentUser);
   const handleLogIn = async () => {
-    const res = logIn(email);
-    console.log("response", res);
-    if (res) {
-      setModalOpen(false);
-      // checkIfUserExist();
+    try {
+      const res = logIn(email);
+      console.log("response", res);
+      if (res) {
+        setModalOpen(false);
+        // checkIfUserExist();
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
