@@ -1,4 +1,4 @@
-import FungibleToken from 0xToken
+import FungibleToken from "./interfaces/FungibleToken.cdc"
 
 pub contract Lancet {
 
