@@ -1,9 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useFlow } from "../context/FlowContext";
-import Navbar from "../components/Navbar";
-import { DahboardRight, DashboardLeft } from "../components/Dashboard";
-import DefaultLayout from "../layouts/DefaultLayout";
 import ConnectModal from "../components/ConnectModal";
 import { flow, hero, hero2, logo, magic } from "../assets/images";
 import Link from "next/link";
