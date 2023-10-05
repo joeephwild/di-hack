@@ -1,31 +1,33 @@
 {
-	"contracts": {
-		"Content": "cadence/contracts/Content.cdc",
-		"LancetToken": "cadence/contracts/LancetToken.cdc",
-		"NftContract": "cadence/contracts/NftContract.cdc",
-		"UserProfileContract": "cadence/contracts/UserProfileContract.cdc",
-		"MentorsContract": "cadence/contracts/MentorsContract.cdc"
-
-	},
-	"networks": {
-		"emulator": "127.0.0.1:3569",
-		"mainnet": "access.mainnet.nodes.onflow.org:9000",
-		"testnet": "access.devnet.nodes.onflow.org:9000"
-	},
-	"accounts": {
-		"DI": {
-			"address": "ae426e1c2ff439bc",
-			"key": {
-				"type": "file",
-				"location": "DI.pkey"
-			}
-		},
-		"emulator-account": {
-			"address": "f8d6e0586b0a20c7",
-			"key": {
-				"type": "file",
-				"location": "./emulator.key"
-			}
-		}
-	}
+  "contracts": {
+    "Content": "./cadence/contracts/Content.cdc",
+    "LancetToken": "./cadence/contracts/LancetToken.cdc",
+    "MentorsContract": "./cadence/contracts/MentorsContract.cdc",
+    "NftContract": "./cadence/contracts/NftContract.cdc",
+    "UserProfileContract": "./cadence/contracts/UserProfileContract.cdc"
+  },
+  "deployments": {
+    "testnet": {
+      "joseph": [
+        "Content",
+        "MentorsContract",
+        "NftContract",
+        "UserProfileContract"
+      ]
+    }
+  },
+  "networks": {
+    "emulator": "127.0.0.1:3569",
+    "mainnet": "access.mainnet.nodes.onflow.org:9000",
+    "testnet": "access.devnet.nodes.onflow.org:9000"
+  },
+  "accounts": {
+    "joseph": {
+      "address": "bf75bc005a7b189f",
+      "key": {
+        "type": "file",
+        "location": "joseph.pkey"
+      }
+    }
+  }
 }

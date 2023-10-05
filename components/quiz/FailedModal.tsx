@@ -1,8 +1,10 @@
 import { XIcon } from "@heroicons/react/solid";
 import Image from "next/image";
-import { badges } from "../../assets/images";
+import { badges, crying } from "../../assets/images";
+import { useRouter } from "next/router";
 
 const FailedModal = ({ closeModal, actionButton }) => {
+  const route = useRouter()
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="w-[30%] bg-white px-12 py-12 rounded-2xl absolute left-[40%] top-[20%]">
@@ -16,21 +18,24 @@ const FailedModal = ({ closeModal, actionButton }) => {
         </div>
         <div className="my-8 w-full">
           <p className="text-gray-400 text-xl w-[85%]">
-            Mistakes are our best teachers. G to the podcast and purchase a
-            podcast, so you can beat this level and claim a free NFTS
+            You have run out of lives. To further improve your knowledge,
+            purchase a podcast and come back when you are ready!
           </p>
         </div>
 
-        <div className="border border-1 rounded-2xl mb-4 flex flex-col justify-center items-center space-y-4 py-4">
-          <Image src={badges} alt="badge" width={150} height={150} />
-          <p className="text-xl font-bold">Level 1 Korean Badge</p>
+        <div className="mb-4 flex flex-col justify-center items-center space-y-4 py-4">
+          <Image
+            src={crying}
+            alt="crying"
+            className="w-[190px] h-[190px] object-contain"
+          />
         </div>
         <div className="w-full mt-8">
           <button
             className="bg-Accent w-full text-center rounded font-semibold py-4"
-            onClick={actionButton}
+            onClick={() => route.push("/podcast")}
           >
-            Claim your NFT Badge
+            Go to podcast
           </button>
         </div>
       </div>

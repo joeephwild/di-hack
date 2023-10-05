@@ -1,9 +1,17 @@
-import NftContract from 0xNftContract
-import ContentContract from 0xContentContract
+export const getToken = `
 import Lancet from 0xLancet
-import UserProfileContract from 0xUserProfileContract
-import MentorContract from 0xMentorContract
 
+pub fun checkTokenBalance(): Int {
+    let lancetRef = getAccount(0xLancetAddress)
+        .getCapability<&Lancet.Collection{Lancet.CollectionPublic}>(/public/LancetCollection)
+        .borrow()
+        ?? panic("Could not borrow Lancet reference")
+
+    return lancetRef.getBalance()
+}
+`;
+
+export const claimNFTS = `
 transaction(taskName: String, image: String) {
     prepare(acct: AuthAccount) {
         let collectionRef = acct.borrow<&NftContract.Collection>(from: /storage/NftCollection)
@@ -23,9 +31,9 @@ transaction(taskName: String, image: String) {
         log("NFT minted and taskName updated")
     }
 }
+`;
 
-
-// Transaction to upload content with ContentContract
+export const createPodcast = `
 transaction uploadContent() {
     prepare(acct: AuthAccount) {
         let contentContractRef = acct.borrow<&ContentContract.Collection>(from: /storage/ContentContractCollection)
@@ -47,7 +55,9 @@ transaction uploadContent() {
         log("Content uploaded with ContentContract")
     }
 }
+`;
 
+export const payForContent = `
 transaction payForContent(contentId: UInt64, paymentAmount: UInt64) {
     prepare(acct: AuthAccount) {
         let contentContractRef = acct.borrow<&ContentContract.Collection>(from: /storage/ContentContractCollection)
@@ -60,22 +70,9 @@ transaction payForContent(contentId: UInt64, paymentAmount: UInt64) {
         log("Content purchased with LancetToken")
     }
 }
+`;
 
-// Transaction to create Lancet tokens with Lancet
-transaction createTokens() {
-    prepare(acct: AuthAccount) {
-        let lancetRef = acct.borrow<&Lancet.Collection>(from: /storage/LancetCollection)
-            ?? panic("Missing or mis-typed Lancet reference")
-
-        // Create Lancet tokens using Lancet contract
-        lancetRef.createLancet(balance: 1000)
-    }
-    execute {
-        log("Lancet tokens created")
-    }
-}
-
-// Transaction to create a user profile with UserProfileContract
+export const createProfile = `
 transaction createUserProfile(username: String) {
     prepare(acct: AuthAccount) {
         let userProfileContractRef = acct.borrow<&UserProfileContract.Collection>(from: /storage/UserProfileContractCollection)
@@ -88,31 +85,6 @@ transaction createUserProfile(username: String) {
         log("User profile created with UserProfileContract")
     }
 }
+`;
 
-// mentor upload content sscript
-transaction uploaMentorContent(title: String, price: UInt64) {
-    let mentorContractRef: &MentorContract.Contract
-    prepare(signer: AuthAccount) {
-        // Get a reference to the MentorContract
-        self.mentorContractRef = signer.borrow<&MentorContract.Contract>(from: /storage/MentorContract)
-            ?? panic("MentorContract not found in storage")
-    }
-    execute {
-        // Call the uploadContent function to upload mentor's content
-        self.mentorContractRef.uploadContent(title: title, price: price)
-    }
-}
-
-// mentor withdraw earning script
-transaction withdrawFunds(contentId: UInt64) {
-    let mentorContractRef: &MentorContract.Contract
-    prepare(signer: AuthAccount) {
-        // Get a reference to the MentorContract
-        self.mentorContractRef = signer.borrow<&MentorContract.Contract>(from: /storage/MentorContract)
-            ?? panic("MentorContract not found in storage")
-    }
-    execute {
-        // Call the withdrawEarnings function to withdraw earnings for a specific content
-        self.mentorContractRef.withdrawEarnings(contentId: contentId)
-    }
-}
+//0xbf75bc005a7b189f
