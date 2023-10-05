@@ -1,5 +1,4 @@
 import * as fcl from "@onflow/fcl";
-import useCurrentUser from "../hooks/useCurrentUser";
 import { useFlow } from "../context/FlowContext";
 import { magic } from "../lib/magic";
 import Image from "next/image";
@@ -9,9 +8,10 @@ import ConnectModal from "./ConnectModal";
 import Link from "next/link";
 
 export default function Navbar() {
-  const user = useCurrentUser();
   // Get the initializeWeb3 function from the Web3 context
-  const { logIn, currentUser, modalOpen, setModalOpen, openWallet } = useFlow();
+  const { currentUser, modalOpen } =
+    useFlow();
+
   return (
     <div>
       <div className="flex items-center justify-between w-full border-b border-Grey pt-[17px] pb-[14px] px-[14px]">
@@ -20,7 +20,9 @@ export default function Navbar() {
           {!currentUser && (
             <button
               className="bg-Accent py-[10px]  px-[24px]"
-              onClick={() => setModalOpen(!modalOpen)}
+              onClick={fcl.authenticate({
+
+              })}
             >
               Connect Wallet
             </button>
@@ -50,7 +52,7 @@ export default function Navbar() {
               <BellIcon className="text-[#667185] w-[28px]" />
 
               <button
-                onClick={openWallet}
+                // onClick={logOut}
                 className="flex items-center space-x-[10px]"
               >
                 <Image
@@ -59,8 +61,8 @@ export default function Navbar() {
                   className="w-[20px] h-[20px] text-Black object-cover rounded-full"
                 />
                 <span className="text-Black">
-                  {currentUser.publicAddress.slice(0, 6)}...{" "}
-                  {currentUser.publicAddress.slice(10, 18)}
+                  {currentUser.addr.slice(0, 6)}...{" "}
+                  {currentUser.addr.slice(10, 18)}
                 </span>
               </button>
             </div>

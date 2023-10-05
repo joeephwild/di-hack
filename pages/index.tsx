@@ -5,6 +5,7 @@ import ConnectModal from "../components/ConnectModal";
 import { flow, hero, hero2, logo, magic } from "../assets/images";
 import Link from "next/link";
 import { verify } from "../lib/magic";
+import { authenticate } from "@onflow/fcl";
 
 export default function Home() {
   const { logIn, currentUser, modalOpen, setModalOpen } = useFlow();
@@ -37,16 +38,16 @@ export default function Home() {
                   to
                   <span className="text-Accent font-bold"> hero</span>
                 </h1>
-                {currentUser?.publicAddress && (
+                {currentUser && (
                   <Link href="/dashboard">
                     <button className="bg-Accent w-full mt-[95px] text-Black font-bold py-[15px] rounded-[8px]">
                       Dashboard
                     </button>
                   </Link>
                 )}
-                {!currentUser?.publicAddress && (
+                {!currentUser && (
                   <button
-                    onClick={() => setModalOpen(!modalOpen)}
+                    onClick={logIn}
                     className="bg-Accent w-full mt-[95px] text-Black font-bold py-[15px] rounded-[8px]"
                   >
                     Get Started

@@ -130,7 +130,7 @@ transaction createUserProfile(username: String) {
 }
 
 // mentor upload content sscript
-transaction(title: String, price: UInt64) {
+transaction uploaMentorContent(title: String, price: UInt64) {
     let mentorContractRef: &MentorContract.Contract
     prepare(signer: AuthAccount) {
         // Get a reference to the MentorContract
@@ -144,7 +144,7 @@ transaction(title: String, price: UInt64) {
 }
 
 // mentor withdraw earning script
-transaction(contentId: UInt64) {
+transaction withdrawFunds(contentId: UInt64) {
     let mentorContractRef: &MentorContract.Contract
     prepare(signer: AuthAccount) {
         // Get a reference to the MentorContract
