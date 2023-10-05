@@ -10,18 +10,18 @@ const ConnectModal = () => {
   const [email, setEmail] = useState("");
   const route = useRouter();
   console.log(currentUser);
-  const handleLogIn = async () => {
-    try {
-      const res = logIn(email);
-      console.log("response", res);
-      if (res) {
-        setModalOpen(false);
-        // checkIfUserExist();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleLogIn = async () => {
+  //   try {
+  //     const res = logIn(email);
+  //     console.log("response", res);
+  //     if (res) {
+  //       setModalOpen(false);
+  //       // checkIfUserExist();
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
