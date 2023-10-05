@@ -38,16 +38,16 @@ export default function Home() {
                   to
                   <span className="text-Accent font-bold"> hero</span>
                 </h1>
-                {currentUser && (
+                {currentUser?.addr && (
                   <Link href="/dashboard">
                     <button className="bg-Accent w-full mt-[95px] text-Black font-bold py-[15px] rounded-[8px]">
                       Dashboard
                     </button>
                   </Link>
                 )}
-                {!currentUser && (
+                {!currentUser?.addr && (
                   <button
-                    onClick={logIn}
+                    onClick={authenticate}
                     className="bg-Accent w-full mt-[95px] text-Black font-bold py-[15px] rounded-[8px]"
                   >
                     Get Started
