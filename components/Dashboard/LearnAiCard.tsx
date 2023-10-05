@@ -1,8 +1,17 @@
 import Image from "next/image";
 import React from "react";
 import { robot } from "../../assets/images";
+import { useRouter } from "next/router";
+import { useFlow } from "../../context/FlowContext";
 
 const LearnAiCard = () => {
+  const route = useRouter();
+  const { setActive } = useFlow();
+
+  const roter = () => {
+    route.push("/aichat");
+    setActive("test");
+  };
   return (
     <div className="bg-Accent w-full py-[16px] px-[15px] rounded-[8px]">
       <div className="flex items-center justify-between w-full ">
@@ -21,7 +30,10 @@ const LearnAiCard = () => {
           className="w-[81.289px] h-[115.332px] object-contain"
         />
       </div>
-      <button className="bg-Black w-full mt-[36px] items-center text-Accent py-[16px] rounded-[8px]">
+      <button
+        onClick={roter}
+        className="bg-Black w-full mt-[36px] items-center text-Accent py-[16px] rounded-[8px]"
+      >
         Get started
       </button>
     </div>

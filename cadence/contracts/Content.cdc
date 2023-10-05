@@ -1,18 +1,17 @@
-import LancetToken from 0xLancetToken
+import Lancet from 0xc3e6f27ffe0f6956
 
 pub contract ContentContract {
-    // Struct to hold the info of very content
     pub struct Content {
         pub var id: UInt64
         pub var owner: Address
         pub var category: String
         pub var file: String
-        pub var price: UInt64
+        pub var price: UFix64 // Price in Lancet tokens
         pub var description: String
         pub var shortDesc: String
         pub var isPremium: Bool
 
-        init(id: UInt64, owner: Address, category: String, file: String, price: UInt64, description: String, shortDesc: String, isPremium: Bool) {
+        init(id: UInt64, owner: Address, category: String, file: String, price: UFix64, description: String, shortDesc: String, isPremium: Bool) {
             self.id = id
             self.owner = owner
             self.category = category
@@ -24,13 +23,8 @@ pub contract ContentContract {
         }
     }
 
-    // Define the array to store the Content
     pub var allContent: [Content]
-
-    // Define the id of a content
-    pub var contentId: UInt256
-
-    // Dictionary to map an address to a content
+    pub var contentId: UInt64
     pub var addressToContent: {Address: Content}
 
     init() {
@@ -39,13 +33,12 @@ pub contract ContentContract {
         self.contentId = 0
     }
 
-    // Function to upload a content to the blockchain
     pub fun uploadAContent(
         id_: UInt64,
         owner_: Address,
         category_: String,
         file_: String,
-        price_: UInt64,
+        price_: UFix64,
         description_: String,
         shortDesc_: String,
         isPremium_: Bool
@@ -60,74 +53,61 @@ pub contract ContentContract {
             shortDesc: shortDesc_,
             isPremium: isPremium_
         )
+
         self.allContent.append(content)
         self.addressToContent[owner_] = content
     }
 
-    // // Function to purchase the content 
-    // pub fun payForContent(contentId: UInt64) {
-    //     let content = self.get(contentId: )
-    //     if let content = content {
-    //         // Ensure the content isn't already owned by the user
-    //         if content.owner != self.signer {
-    //             // Payment logic here
-    //         } else {
-    //             // This should signify the content is owned by the caller
-    //         }
-    //     } else {
-    //         // Implementation of content not available
-    //     }
-    // }
-    pub fun payForContent(contentId: UInt64, paymentAmount: UInt64) {
-        let content = self.get(contentId: contentId)
+    // Function to purchase content using Lancet tokens
+    pub fun payForContent(contentId: UInt64) {
+        let content = self.getContent(contentId: contentId)
 
-         if content == nil {
-        // Content with the specified ID doesn't exist
+        if content == nil {
             panic("Content not available")
         }
 
         if content!.owner == self.signer {
-            // Content is already owned by the caller
             panic("Content is already owned by the caller")
         }
 
-        if paymentAmount < content!.price {
-            // Insufficient payment amount
-            panic("Insufficient payment amount")
-        }
-
-        // perform the Lancet transfer logic
-        let lancetRef = getAccount(self.signer)
-            .getCapability<&Lancet.Vault{FungibleToken.Receiver}>(
-                /public/LancetReceiver
+        // Access Lancet contract using its interface
+        let lancetRef = getAccount(self.address)
+            .getCapability<&Lancet.Token{Lancet.Receiver}>(
+                /public/LancetTokenReceiver
             )
             .borrow()
-            ?? panic("Could not borrow Lancet receiver receiver")
+            ?? panic("Could not borrow Lancet Token Receiver capability")
 
-        lancetRef.deposit(from: <-create Lancet.DepositVault(amount: paymentAmount))
-        lancetRef.withdraw(amount: paymentAmount, target: content!.owner)
+        if lancetRef.balance < content!.price {
+            panic("Insufficient Lancet token balance")
+        }
 
-        // update the owner of the content
+        // Transfer Lancet tokens to the content owner
+        let receiver = content!.owner
+        let amount = content!.price
+
+        lancetRef.transfer(to: receiver, amount: amount)
+
+        // Update the owner of the content
         content!.owner = self.signer
 
         log("Content purchased successfully")
     }
 
-    // Function to get the content by ID
-    pub fun get(contentId: UInt64): &Content? {
+    pub fun getContent(contentId: UInt64): Content? {
         if contentId < UInt64(self.allContent.length) {
-            return &self.allContent[contentId]
+            return self.allContent[contentId]
         }
         return nil
     }
 
-    // Function to list all available content
     pub fun listAllContent(): [Content] {
         return self.allContent
     }
 
-    // Function to list all premium items
     pub fun listPremiumContent(): [Content] {
-        return self.allContent.filter({ $0.isPremium })
+        return self.allContent.filter({ (content: Content) -> Bool in
+            return content.isPremium
+        })
     }
 }

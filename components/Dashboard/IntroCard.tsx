@@ -9,7 +9,6 @@ const IntroCard = () => {
 
   const handleRoute = () => {
     route.push("/quiz");
-    setActive("test");
   };
   return (
     <div className="bg-Grey/900 p-[40px] w-[700px] h-[150px] rounded-[8px]">
@@ -23,7 +22,7 @@ const IntroCard = () => {
 
         <button
           onClick={handleRoute}
-          className="bg-Accent py-[10px] px-[24px] rounded-[8px]"
+          className="bg-Accent text-Black py-[10px] px-[24px] rounded-[8px]"
         >
           Start quiz
         </button>

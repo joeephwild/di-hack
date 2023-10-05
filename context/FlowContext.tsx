@@ -1,17 +1,18 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Magic } from "magic-sdk";
 import * as fcl from "@onflow/fcl";
-import { magic } from "../lib/magic";
+import { useRouter } from "next/router";
+
 
 // Define the structure of the Flow context state
 type FlowContextType = {
   currentUser: any;
-  logIn: (emailAddress: string) => Promise<void>;
-  logOut: () => void;
+  logIn: () => Promise<void>;
+  // logOut: () => void;
   setActive: React.Dispatch<React.SetStateAction<string>>;
   active: string;
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  // openWallet: () => Promise<void>;
 };
 
 // Create the context with default values
@@ -22,33 +23,48 @@ export const useFlow = () => useContext(FlowContext);
 
 // Provider component to wrap around components that need access to the context
 export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState();
   const [active, setActive] = useState("learn");
   const [modalOpen, setModalOpen] = useState(false);
+  // console.log(currentUser);
+  const route = useRouter();
 
   // Log in function
-  const logIn = async (emailAddress: string) => {
-    await magic.auth.loginWithMagicLink({ email: emailAddress });
-    const currentUser = await magic.user.getInfo();
-    setCurrentUser(currentUser);
+  const logIn = async () => {
+    try {
+      fcl.authenticate();
+      const res = fcl
+        .currentUser()
+        .subscribe((user) =>
+          user ? setCurrentUser(user) : setCurrentUser(null)
+        );
+      if (res) {
+        route.push("/dashboard");
+      }
+    } catch (error) {
+      alert("error connectting wallet");
+      console.error(error);
+    }
   };
 
   // Log out function
   const logOut = async () => {
-    await magic.user.logout();
-    setCurrentUser(null);
+    try {
+      const res = fcl.unauthenticate();
+      route.push("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // Effect to initialize Magic when the component mounts
+  // // Effect to initialize Magic when the component mounts
   useEffect(() => {
     const getCurrentUser = async () => {
-      const res = await magic.user.isLoggedIn();
-      if (res) {
-        const user = await magic.user.getInfo();
-        setCurrentUser(user);
-      } else {
-        setCurrentUser(null);
-      }
+      const res = fcl
+        .currentUser()
+        .subscribe((user) =>
+          user ? setCurrentUser(user) : setCurrentUser(null)
+        );
     };
     getCurrentUser();
   }, [currentUser]);
@@ -58,67 +74,15 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         currentUser,
         logIn,
-        logOut,
+        // logOut,
         setActive,
         active,
         modalOpen,
         setModalOpen,
+        // openWallet,
       }}
     >
       {children}
     </FlowContext.Provider>
   );
 };
-
-// import React, { createContext, useContext, useEffect, useState } from "react";
-// import Web3 from "web3";
-// import { magic } from "../lib/magic";
-
-// // Define the structure of the Web3 context state
-// type Web3ContextType = {
-//   web3: Web3 | null;
-//   initializeWeb3: () => void;
-// };
-
-// // Create the context with default values
-// const Web3Context = createContext<Web3ContextType>({
-//   web3: null,
-//   initializeWeb3: () => {},
-// });
-
-// // Custom hook to use the Web3 context
-// export const useWeb3 = () => useContext(Web3Context);
-
-// // Provider component to wrap around components that need access to the context
-// export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
-//   // State variable to hold an instance of Web3
-//   const [web3, setWeb3] = useState<Web3 | null>(null);
-
-//   // Initialize Web3
-//   const initializeWeb3 = async () => {
-//     // Get the provider from the Magic instance
-//     const provider = await magic.wallet.getProvider();
-
-//     // Create a new instance of Web3 with the provider
-//     const web3 = new Web3(provider);
-
-//     // Save the instance to state
-//     setWeb3(web3);
-//   };
-
-//   // Effect to initialize Web3 when the component mounts
-//   useEffect(() => {
-//     initializeWeb3();
-//   }, []);
-
-//   return (
-//     <Web3Context.Provider
-//       value={{
-//         web3,
-//         initializeWeb3,
-//       }}
-//     >
-//       {children}
-//     </Web3Context.Provider>
-//   );
-// };

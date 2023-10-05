@@ -1,16 +1,14 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useFlow } from "../context/FlowContext";
-import Navbar from "../components/Navbar";
-import { DahboardRight, DashboardLeft } from "../components/Dashboard";
-import DefaultLayout from "../layouts/DefaultLayout";
 import ConnectModal from "../components/ConnectModal";
 import { flow, hero, hero2, logo, magic } from "../assets/images";
 import Link from "next/link";
+import { verify } from "../lib/magic";
+import { authenticate } from "@onflow/fcl";
 
 export default function Home() {
   const { logIn, currentUser, modalOpen, setModalOpen } = useFlow();
-
   return (
     <div>
       <Head>
@@ -40,25 +38,26 @@ export default function Home() {
                   to
                   <span className="text-Accent font-bold"> hero</span>
                 </h1>
-                {currentUser && (
+                {currentUser?.addr && (
                   <Link href="/dashboard">
-                    <button
-                      className="bg-Accent w-full mt-[95px] text-Black font-bold py-[15px] rounded-[8px]"
-                    >
+                    <button className="bg-Accent w-full mt-[95px] text-Black font-bold py-[15px] rounded-[8px]">
                       Dashboard
                     </button>
                   </Link>
                 )}
-                {!currentUser && (
+                {!currentUser?.addr && (
                   <button
-                    onClick={() => setModalOpen(!modalOpen)}
+                    onClick={authenticate}
                     className="bg-Accent w-full mt-[95px] text-Black font-bold py-[15px] rounded-[8px]"
                   >
                     Get Started
                   </button>
                 )}
 
-                <div className="flex items-center text-Grey justify-center">
+                <div
+                  onClick={verify}
+                  className="flex items-center text-Grey justify-center"
+                >
                   <span>Secured by</span>
                   <Image
                     src={magic}

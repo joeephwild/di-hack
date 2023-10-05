@@ -9,16 +9,19 @@ const ConnectModal = () => {
   const { checkIfUserExist } = useUser();
   const [email, setEmail] = useState("");
   const route = useRouter();
-
-  const handleLogIn = async () => {
-    const res = logIn(email);
-    console.log("response", res);
-
-    if (res) {
-      setModalOpen(false);
-      checkIfUserExist();
-    }
-  };
+  console.log(currentUser);
+  // const handleLogIn = async () => {
+  //   try {
+  //     const res = logIn(email);
+  //     console.log("response", res);
+  //     if (res) {
+  //       setModalOpen(false);
+  //       // checkIfUserExist();
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -46,7 +49,7 @@ const ConnectModal = () => {
         </form>
         <div className="mt-6">
           <button
-            onClick={handleLogIn}
+            // onClick={handleLogIn}
             className="bg-Accent text-white w-full rounded-lg py-3"
           >
             Submit

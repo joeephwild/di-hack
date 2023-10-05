@@ -1,11 +1,22 @@
 {
 	"contracts": {
 		"Content": "cadence/contracts/Content.cdc",
-		"LancetToken": "cadence/contracts/LancetToken.cdc",
-		"NftContract": "cadence/contracts/NftContract.cdc",
-		"UserProfileContract": "cadence/contracts/UserProfileContract.cdc",
-		"MentorsContract": "cadence/contracts/MentorsContract.cdc"
-
+		"FungibleToken": {
+			"source": "./cadence/contracts/interfaces/FungibleToken.cdc",
+			"aliases": {
+				"testnet": "9a0766d93b6608b7"
+			}
+		},
+		"LancetNFT": "./cadence/contracts/LancetNFT.cdc",
+		"LancetToken": "./cadence/contracts/LancetToken.cdc",
+		"MentorsContract": "cadence/contracts/MentorsContract.cdc",
+		"NonFungibleToken": {
+			"source": "./cadence/contracts/interfaces/NonFungibleToken.cdc",
+			"aliases": {
+				"testnet": "631e88ae7f1d7c20"
+			}
+		},
+		"UserProfileContract": "./cadence/contracts/UserProfileContract.cdc"
 	},
 	"networks": {
 		"emulator": "127.0.0.1:3569",
@@ -26,6 +37,17 @@
 				"type": "file",
 				"location": "./emulator.key"
 			}
+		},
+		"testnet": {
+			"address": "c3e6f27ffe0f6956",
+			"key": "b73dd7daa622f356813523916ea60da0c7bfaa9d784fb5e56aaabad1b554c81d"
+		}
+	},
+	"deployments": {
+		"testnet": {
+			"testnet": [
+				"Content"
+			]
 		}
 	}
 }

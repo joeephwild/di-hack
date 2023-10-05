@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import RealTimeChat from './RealTimeChat';
-import { auth, db } from "../../firebase";
+//import RealTimeChat from './RealTimeChat';
 
 
 
@@ -100,7 +99,7 @@ function ChatApp() {
         <div className="welcome-message">Select a profile to start a chat</div>
       )}
       
-      <RealTimeChat />
+    
     </div>
   );
 }
