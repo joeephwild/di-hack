@@ -17,13 +17,13 @@ export default function Navbar() {
       <div className="flex items-center justify-between w-full border-b border-Grey pt-[17px] pb-[14px] px-[14px]">
         <div className=""></div>
         <div>
-          {!currentUser.addr && (
+          {!currentUser?.addr && (
             <button className="bg-Accent py-[10px]  px-[24px]" onClick={logIn}>
               Connect Wallet
             </button>
           )}
 
-          {currentUser.addr && (
+          {currentUser?.addr && (
             <div className="flex items-center space-x-10 w-full">
               <Link href="/beAMentor">
                 <button className="bg-Orange/50 text-Orange flex space-x-[10px] items-center py-[10px] px-[24px]">
