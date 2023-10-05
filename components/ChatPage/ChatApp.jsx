@@ -19,9 +19,6 @@ function ChatApp() {
   ]);
 
 
-  
-
-
 
   const handleSendMessage = () => {
     if (messageInput.trim() === "") return;
@@ -33,9 +30,6 @@ function ChatApp() {
     selectedUser.messages.push(newMessage);
     setMessageInput('');
   };
-
-
-
   
 
   const handleOpenPersonalChat = (user) => {
