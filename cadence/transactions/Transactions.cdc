@@ -1,28 +1,82 @@
-import NftContract from 0xNftContract
-import ContentContract from 0xContentContract
-import Lancet from 0xLancet
-import UserProfileContract from 0xUserProfileContract
-import MentorContract from 0xMentorContract
+import ContentContract from "./contracts/ContentContract.cdc"
+import Lancet from 0xc3e6f27ffe0f6956
+import UserProfileContract from "./contracts/UserProfileContract.cdc"
+import MentorContract from "./contracts/MentorsContract.cdc"
+import FungibleToken from 0xc3e6f27ffe0f6956
+import LancetNFT from "./contracts/LancetToken.cdc"
 
-transaction(taskName: String, image: String) {
-    prepare(acct: AuthAccount) {
-        let collectionRef = acct.borrow<&NftContract.Collection>(from: /storage/NftCollection)
-            ?? panic("Missing or mis-typed collection reference")
+// the mint token transaction
+transaction(receiverAccount: Address) {
 
-        // mint the new nft with provided taskName and image
-        let image = "QmRaRjEUNKDTTsXxBv8gcz5vYW8nzfycknveC3ReAJN9D5"
-        collectionRef.mintNFT(taskName: taskName, image: image)
-        
-        // find the ID of the newly minted NFT
-        let nftID = collectionRef.nfts.length - 1
+  prepare(acct: AuthAccount) {
+    let mint = acct.borrow<&Lancet.Mint>(from: /storage/Mint)
+                  ?? panic("We could not borrow the Mint resource")
+    
+    let newVault <- mint.mintToken(amount: 20.0)
 
-        // automatically update the taskName of the newly minted NFT
-        collectionRef.markTaskCompleted(nftID: nftID, taskName: taskName)
-    }
-    execute {
-        log("NFT minted and taskName updated")
-    }
+    let receiverVault = getAccount(receiverAccount).getCapability(/public/Vault)
+                          .borrow<&Lancet.Vault{FungibleToken.Receiver}>()
+                          ?? panic("Couldn't get the public vault :(")
+    
+    receiverVault.deposit(from: <- newVault)
+  }
+
+  execute {
+    log("Successfully deppsited tokens into receiver account")
+  }
 }
+
+// the create vault transaction
+transaction {
+
+  prepare(acct: AuthAccount) {
+    acct.save(<- Lancet.createEmptyVault(), to: /storage/Vault)
+    acct.link<&Lancet.Vault{FungibleToken.Balance, FungibleToken.Receiver}>(/public/Vault, target: /storage/Vault)
+  }
+
+  execute {
+    log("Personal vault saved!")
+  }
+}
+
+// the transfer function
+transaction(receiverAccount: Address, amount: UFix64) {
+
+  prepare(acct: AuthAccount) {
+    let signerVault = acct.borrow<&Lancet.Vault>(from: /storage/Vault)
+                        ?? panic("Signer's vault not available")
+    let receiverVault = getAccount(receiverAccount).getCapability(/public/Vault)
+                          .borrow<&Lancet.Vault{FungibleToken.Receiver}>()
+                          ?? panic("Couldn't get the public vault :(")
+
+    receiverVault.deposit(from: <- signerVault.withdraw(amount: amount))
+  }
+
+  execute {
+    log("Lacent Transferred!")
+  }
+}
+
+// the mint nft transaction
+transaction(image: String, name: String) {
+
+  prepare(acct: AuthAccount) {
+    // assigning a collection to the signer if it doesn't exist
+    if acct.borrow<&LancetNFT.Collection>(from: /storage/LancetNFTCollection) == nil {
+      acct.save(<- LancetNFT.createEmptyCollection(), to: /storage/LancetNFTCollection)
+      acct.link<&LancetNFT.Collection{LancetNFT.CollectionPublic}>(/public/LancetNFTCollection, target: /storage/LancetNFTCollection)
+    }
+
+    let nftCollection = acct.borrow<&LancetNFT.Collection>(from: /storage/LancetNFTCollection)!
+
+    nftCollection.deposit(token: <- LancetNFT.mintNFT(image: image, name: name))
+  }
+
+  execute {
+    log("NFT Minted!")
+  }
+}
+
 
 
 // Transaction to upload content with ContentContract
@@ -58,20 +112,6 @@ transaction payForContent(contentId: UInt64, paymentAmount: UInt64) {
     }
     execute {
         log("Content purchased with LancetToken")
-    }
-}
-
-// Transaction to create Lancet tokens with Lancet
-transaction createTokens() {
-    prepare(acct: AuthAccount) {
-        let lancetRef = acct.borrow<&Lancet.Collection>(from: /storage/LancetCollection)
-            ?? panic("Missing or mis-typed Lancet reference")
-
-        // Create Lancet tokens using Lancet contract
-        lancetRef.createLancet(balance: 1000)
-    }
-    execute {
-        log("Lancet tokens created")
     }
 }
 

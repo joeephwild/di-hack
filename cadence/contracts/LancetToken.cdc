@@ -1,82 +1,60 @@
-import FungibleToken from 0xToken
+import FungibleToken from "./interfaces/FungibleToken.cdc"
 
-pub contract Lancet {
+pub contract Lancet: FungibleToken {
+     
+    pub var totalSupply: UFix64
 
-    pub resource Token {
-        pub(set) var balance: Int
+    pub event TokensInitialized(initialSupply: UFix64)
+    pub event TokensWithdrawn(amount: UFix64, from: Address?)
+    pub event TokensDeposited(amount: UFix64, to: Address?)
 
-        init(balance: Int) {
+
+    pub resource Vault: FungibleToken.Provider, FungibleToken.Receiver, FungibleToken.Balance{
+        pub var balance: UFix64
+
+        pub fun deposit(from: @FungibleToken.Vault) {
+            let vault <- from as! @Lancet.Vault
+            emit TokensDeposited(amount: vault.balance, to: self.owner?.address)
+            self.balance = self.balance + vault.balance
+
+            vault.balance = 0.0
+            destroy vault
+        }
+
+        pub fun withdraw(amount: UFix64): @FungibleToken.Vault {
+            self.balance = self.balance - amount
+            emit TokensWithdrawn(amount: amount, from: self.owner?.address)
+            return <- create Vault(balance: amount)
+        }
+
+        init(balance: UFix64) {
             self.balance = balance
         }
-    }
 
-    //initialising the contract with an empty collection of tokens
-    pub init() {}
-
-
-    pub fun createLancet(balance: Int): @Token {
-        return <- create Token(balance: balance)
-    }
-
-    pub fun transfer(from: @Token, to: Address, amount: Int) {
-
-        // if from.balance >= amount {
-        // //creating a new Token resource with the updated balance
-        //     let newBalance = from.balance - amount
-
-        //     let updatedFrom <- from.with(balance: newBalance)
-
-        //     //transfering the u pdated resource back to 'from'
-        //     from <- updatedFrom
-
-        //     // let recipient: PublicAccount = getAccount(to)
-        //     // recipient.withdraw(amount)
-        //     let recipient: &(FungibleToken.Receiver) = to.borrow<&(FungibleToken.Receiver)>(from: /storage/LancetReceiver)
-        //         ?? panic("Recipient does not support FungibleToken.Receiver")
-            
-        //     recipient.deposit(from: <-create FungibleToken.DepositVault(amount: amount))
-        // } else {
-        //     panic("Insufficient balance")
-        // }
-        let newBalance = from.balance - amount
-
-        if newBalance < 0 {
-            // insufficient balance
-            panic("Insufficient balance")
+        destroy() {
+            Lancet.totalSupply = Lancet.totalSupply - self.balance
         }
-
-        //creating a new token resource with the updated balance
-        let updatedFrom <- from.with(balance: newBalance)
-
-        // Transferring the updated resource back to from
-        from <- updatedFrom
-
-        // Let recipient: PublicAccount = getAccount(to)
-        // recipient.withdraw(amount)
-        let recipient: &(FungibleToken.Receiver) = to.borrow<&(FungibleToken.Receiver)>(from: /storage/LancetReceiver)
-            ?? panic("Recipient does not support FungibleToken.Receiver")
-
-        recipient.deposit(from: <-create FungibleToken.DepositVault(amount: amount))
     }
 
-    pub fun getBalance(token: &Token): Int {
-        return token.balance
+    pub fun createEmptyVault(): @FungibleToken.Vault {
+        return <- create Vault(balance: 0.0)
     }
 
-    // function to mint new Lancet tokens (for the admin)
-    pub fun mintTokens(amount: Int) {
-        let admin = getAccount(0xAdminAddress)
-        let recipient: &(FungibleToken.Receiver) = admin.borrow<&(FungibleToken.Receiver)>(from: /storage/LancetReceiver)
-            ?? panic("Admin does not support FungibleToken.Receiver")
-        recipient.deposit(from: <-create FungibleToken.DepositVault(amount: amount))
+    pub resource Mint {
+        pub fun mintToken(amount: UFix64): @FungibleToken.Vault {
+            Lancet.totalSupply = Lancet.totalSupply + amount
+            return <-create Vault(balance: amount)
+        }
+        
+        init() {
+
+        }
     }
 
-    pub fun burnTokens(amount:Int) {
-        let admin = getAccount(0xAdminAddress)
-        let recipient: &(FungibleToken.Receiver) = admin.borrow<&(FungibleToken.Receiver)>(from: /storage/LancetReceiver)
-            ?? panic("Admin does not support FungibleToken.Receiver")
+    init() {
+        self.totalSupply = 0.0
 
-        recipient.withdraw(amount)
+        self.account.save(<- create Mint(), to: /storage/Mint)
     }
 
 }
