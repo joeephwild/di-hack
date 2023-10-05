@@ -9,65 +9,57 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useFlow } from "../../context/FlowContext";
+import { auth, db } from "../../firebase";
 
 
+const firebaseConfig = {
+  apiKey: "AIzaSyACWp-N8oSQIEDEfr-WkGPxIwYwGZydij4",
+  authDomain: "lacent-7a6b4.firebaseapp.com",
+  databaseURL: "https://lacent-7a6b4-default-rtdb.firebaseio.com/",
+  projectId: "lacent-7a6b4",
+  storageBucket: "lacent-7a6b4.appspot.com",
+  messagingSenderId: "388128287208",
+  appId: "1:388128287208:web:22e1bf229fc29edb909c5d"
+};
 
-function  RealTimeChat() {
-  const [messages, setMessages] = useState([]);
+function RealTimeChat() {
   const [messageInput, setMessageInput] = useState('');
-  const [showPersonalChat, setShowPersonalChat] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [userProfiles, setUserProfiles] = useState([]);
-
-
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-    
-
+  const user = auth.currentUser;
 
   useEffect(() => {
-    const unsubscribe = firestore.collection('userProfiles').onSnapshot(snapshot => {
-      const profiles = snapshot.docs.map(doc => doc.data());
-      setUserProfiles(profiles);
+    const chatRef = ref(db, 'chat');
+
+    // listen for new messages
+    onChildAdded(chatRef, (snapshot) => {
+      const newMessage = snapshot.val();
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
-    return () => unsubscribe();
-  }, []);
+    return () => {
+      // unsubscribe from firebase realtime database
+      off(chatRef);
+    };
+  }, [db]);
 
   const handleSendMessage = () => {
     if (messageInput.trim() === '') return;
 
+    // send the message to firebase realtime database
+    const chatRef = ref(db, 'chat');
     const newMessage = {
       text: messageInput,
-      sender: 'current_user',
+      sender: user.displayName || 'anonymous',
+      timestamp: Date.now(),
     };
 
-    // Send the new message to Firestore
-    firestore.collection('userProfiles').doc(selectedUser.id).collection('messages').add(newMessage)
-      .then(() => {
-        setSelectedUser(prevUser => ({
-          ...prevUser,
-          messages: [...prevUser.messages, newMessage],
-        }));
-        setMessageInput('');
-      })
-      .catch(error => {
-        console.error('Error sending message:', error);
-      });
-  };
-
-  const handleOpenPersonalChat = (user) => {
-    setSelectedUser(user);
-    setShowPersonalChat(true);
+    push(chatRef, newMessage);
+    setMessageInput('');
   };
 
   return (
     <div>
       Chat App
-
     </div>
-
   );
 }
 
