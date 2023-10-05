@@ -46,7 +46,7 @@
 	"deployments": {
 		"testnet": {
 			"testnet": [
-				"UserProfileContract"
+				"Content"
 			]
 		}
 	}
