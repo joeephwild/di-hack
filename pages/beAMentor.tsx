@@ -8,7 +8,7 @@ const BeAMentor = () => {
   return (
     <>
       {/* <Navbar /> */}
-      <div className="flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center overflow-y-scroll ">
         <div className="flex flex-col items-center mt-[156px] justify-center w-[900px] border p-[24px]">
           <div className="flex items-center justify-between w-full p-[16px[">
             <XIcon

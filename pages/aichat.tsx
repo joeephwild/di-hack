@@ -46,11 +46,11 @@ const AiChat = () => {
     <DefaultLayout>
       <Navbar />
       <div className="flex items-start">
-        <div className="w-[80%] text-Black m-[10px]">
+        <div className="w-[80%] overflow-y-scroll scrollbar-hide text-Black m-[10px]">
           <span className="text-[28px] my-[31px] mx-[37px] text-Black">
             Learn with AI
           </span>
-          <div className="flex-1 min-h-screen overflow-y-scroll mt-[20px] scrollbar m-9">
+          <div className="flex-1 min-h-screen mt-[20px] scrollbar m-9">
             {chatHistories.map((item, i) => (
               <ChatCompoents key={i} {...item} />
             ))}

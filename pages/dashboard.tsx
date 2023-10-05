@@ -7,7 +7,7 @@ const dashboard = () => {
   return (
     <DefaultLayout>
       <Navbar />
-      <div className="flex items-start w-full h-screen gap-5">
+      <div className="flex items-start w-full h-screen overflow-y-scroll gap-5">
         <div className="w-[60%] h-screen overflow-y-scroll pt-[41px] pb-[50px] px-[40px]">
           <DahboardRight />
         </div>
