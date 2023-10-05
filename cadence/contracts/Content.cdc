@@ -1,4 +1,4 @@
-import Lancet from "./LancetToken.cdc"
+import Lancet from 0xc3e6f27ffe0f6956
 
 pub contract ContentContract {
     pub struct Content {
@@ -24,7 +24,7 @@ pub contract ContentContract {
     }
 
     pub var allContent: [Content]
-    pub var contentId: UInt256
+    pub var contentId: UInt64
     pub var addressToContent: {Address: Content}
 
     init() {
@@ -60,7 +60,7 @@ pub contract ContentContract {
 
     // Function to purchase content using Lancet tokens
     pub fun payForContent(contentId: UInt64) {
-        let content = self.get(contentId: contentId)
+        let content = self.getContent(contentId: contentId)
 
         if content == nil {
             panic("Content not available")
@@ -70,7 +70,15 @@ pub contract ContentContract {
             panic("Content is already owned by the caller")
         }
 
-        if self.balance < content!.price {
+        // Access Lancet contract using its interface
+        let lancetRef = getAccount(self.address)
+            .getCapability<&Lancet.Token{Lancet.Receiver}>(
+                /public/LancetTokenReceiver
+            )
+            .borrow()
+            ?? panic("Could not borrow Lancet Token Receiver capability")
+
+        if lancetRef.balance < content!.price {
             panic("Insufficient Lancet token balance")
         }
 
@@ -78,8 +86,7 @@ pub contract ContentContract {
         let receiver = content!.owner
         let amount = content!.price
 
-        // Transfer Lancet tokens using the Lancet contract
-        Lancet.transfer(from: self.account, to: receiver, amount: amount)
+        lancetRef.transfer(to: receiver, amount: amount)
 
         // Update the owner of the content
         content!.owner = self.signer
@@ -87,9 +94,9 @@ pub contract ContentContract {
         log("Content purchased successfully")
     }
 
-    pub fun get(contentId: UInt64): &Content? {
+    pub fun getContent(contentId: UInt64): Content? {
         if contentId < UInt64(self.allContent.length) {
-            return &self.allContent[contentId]
+            return self.allContent[contentId]
         }
         return nil
     }
@@ -99,6 +106,8 @@ pub contract ContentContract {
     }
 
     pub fun listPremiumContent(): [Content] {
-        return self.allContent.filter({ $0.isPremium })
+        return self.allContent.filter({ (content: Content) -> Bool in
+            return content.isPremium
+        })
     }
 }

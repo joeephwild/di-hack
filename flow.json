@@ -7,9 +7,9 @@
 				"testnet": "9a0766d93b6608b7"
 			}
 		},
+		"LancetNFT": "./cadence/contracts/LancetNFT.cdc",
 		"LancetToken": "./cadence/contracts/LancetToken.cdc",
 		"MentorsContract": "cadence/contracts/MentorsContract.cdc",
-		"NftContract": "cadence/contracts/NftContract.cdc",
 		"NonFungibleToken": {
 			"source": "./cadence/contracts/interfaces/NonFungibleToken.cdc",
 			"aliases": {
@@ -46,8 +46,7 @@
 	"deployments": {
 		"testnet": {
 			"testnet": [
-				"LancetToken",
-				"FungibleToken"
+				"Content"
 			]
 		}
 	}

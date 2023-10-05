@@ -1,5 +1,5 @@
-import ContentContract from "./ContentContract.cdc"
-import Lancet from "./LancetToken.cdc"
+import ContentContract from "./Content.cdc"
+import Lancet from 0xc3e6f27ffe0f6956
 
 pub contract MentorContract {
     // struct to hold information about a mentor's content
@@ -17,13 +17,13 @@ pub contract MentorContract {
     pub var contentContract: &ContentContract.Contract
 
     // reference to the Lancet token contract
-    pub var lancetToken: &Lancet.Token
+    pub var lancet: &Lancet.Token
 
-    // initialize the contract with references to ContentContract and LancetToken
-    init(contentContract: &ContentContract.Contract, lancetToken: &Lancet.Token) {
+    // initialize the contract with references to ContentContract and Lancet
+    init(contentContract: &ContentContract.Contract, lancet: &Lancet.Token) {
         self.mentorContents = []
         self.contentContract = contentContract
-        self.lancetToken = lancetToken
+        self.lancet = lancet
     }
 
     // function for a mentor to upload a content
@@ -46,9 +46,9 @@ pub contract MentorContract {
             let content = self.contentContract.get(contentId: contentId)
             if content != nil && content!.owner == self.signer {
                 // withdraw the earning to the mentor's Lancet token balance
-                let lancetBalance = self.lancetToken.getBalance(account: &self.signer.load<@Lancet.Token>(from: /storage/LancetToken))
+                let lancetBalance = self.lancet.getBalance(account: &self.signer.load<@Lancet.Token>(from: /storage/Vault))
                 if lancetBalance >= UFix64(mentorContent!.price) {
-                    self.lancetToken.transfer(from: &self.signer.load<@Lancet.Token>(from: /storage/LancetToken), to: self.signer, amount: UFix64(mentorContent!.price))
+                    self.lancet.transfer(from: &self.signer.load<@Lancet.Token>(from: /storage/Vault), to: self.signer, amount: UFix64(mentorContent!.price))
                     self.mentorContents.remove(at: self.mentorContents.firstIndex(of: mentorContent!)!)
                 } else {
                     panic("Insufficient balance in Lancet Token")
