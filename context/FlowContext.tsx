@@ -26,7 +26,7 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState();
   const [active, setActive] = useState("learn");
   const [modalOpen, setModalOpen] = useState(false);
-  console.log(currentUser);
+  // console.log(currentUser);
   const route = useRouter();
 
   // Log in function
