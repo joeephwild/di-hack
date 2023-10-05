@@ -2,9 +2,11 @@ import { XIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import { badges, crying } from "../../assets/images";
 import { useRouter } from "next/router";
+import { useContract } from "../../context/ContractProvider";
 
 const FailedModal = ({ closeModal, actionButton }) => {
   const route = useRouter()
+  const {claimNft} = useContract()
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="w-[30%] bg-white px-12 py-12 rounded-2xl absolute left-[40%] top-[20%]">
@@ -33,7 +35,8 @@ const FailedModal = ({ closeModal, actionButton }) => {
         <div className="w-full mt-8">
           <button
             className="bg-Accent w-full text-center rounded font-semibold py-4"
-            onClick={() => route.push("/podcast")}
+            // onClick={() => route.push("/podcast")}
+            onClick={claimNft}
           >
             Go to podcast
           </button>

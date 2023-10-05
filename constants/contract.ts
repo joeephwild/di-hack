@@ -1,5 +1,5 @@
 export const getToken = `
-import Lancet from 0xLancet
+import Lancet from 0xc3e6f27ffe0f6956
 
 pub fun checkTokenBalance(): Int {
     let lancetRef = getAccount(0xLancetAddress)
@@ -12,7 +12,8 @@ pub fun checkTokenBalance(): Int {
 `;
 
 export const claimNFTS = `
-transaction(taskName: String, image: String) {
+c3e6f27ffe0f6956
+transaction claimNft(taskName: String, image: String) {
     prepare(acct: AuthAccount) {
         let collectionRef = acct.borrow<&NftContract.Collection>(from: /storage/NftCollection)
             ?? panic("Missing or mis-typed collection reference")

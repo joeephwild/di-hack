@@ -14,13 +14,13 @@ fcl.config({
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ContractProvider>
-      <FlowProvider>
+    <FlowProvider>
+      <ContractProvider>
         <UserProvider>
           <Component {...pageProps} />
         </UserProvider>
-      </FlowProvider>
-    </ContractProvider>
+      </ContractProvider>
+    </FlowProvider>
   );
 }
 

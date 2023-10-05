@@ -1,8 +1,10 @@
 import { XIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import { badges } from "../../assets/images";
+import { useContract } from "../../context/ContractProvider";
 
 const WinModal = ({ closeModal, actionButton }) => {
+  const { claimNft } = useContract();
   return (
     <div className="w-[30%] bg-white px-12 py-12 rounded-2xl absolute left-[40%] top-[20%]">
       <div className="flex w-full justify-between">
@@ -26,7 +28,7 @@ const WinModal = ({ closeModal, actionButton }) => {
       <div className="w-full mt-8">
         <button
           className="bg-Accent w-full text-center rounded font-semibold py-4"
-          onClick={actionButton}
+          onClick={claimNft}
         >
           Claim your NFT Badge
         </button>
