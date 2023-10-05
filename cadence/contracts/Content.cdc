@@ -1,4 +1,4 @@
-import Lancet from "./Lancet.cdc"
+import Lancet from "./LancetToken.cdc"
 
 pub contract ContentContract {
     pub struct Content {

@@ -1,7 +1,7 @@
-import NftContract from 0xNftContract
-import ContentContract from 0xContentContract
+import LancetNFT from "./contracts/LacentNFT.cdc"
+import ContentContract from "./contracts/ContentContract.cdc"
 import Lancet from 0xc3e6f27ffe0f6956
-import UserProfileContract from 0xUserProfileContract
+import UserProfileContract from "./contracts/UserProfileContract.cdc"
 import FungibleToken from 0xc3e6f27ffe0f6956
 
 // to interact with the accounts
@@ -19,13 +19,17 @@ pub fun main(){
 }
 
 // script to interact with the NFT contract
-pub fun main(account: Address): [NftContract.NFT] {
+pub fun main(account: Address): Int{
 
-    let collectionRef = getAccount(account)
-        .getCapability<&NftContract.Collection{NftContract.CollectionPublic}>(/public/NftCollection)
-        .borrow()
-        ?? panic("Could not bottow NftCollection reference")
-    return collectionRef.getOwnedNFTs(account: account)
+    nftCollection = getAccount(account).getCapability(/public/LancetNFTCollection)
+                      .borrow<LancetNFTCollection(LancetNFT.CollectionPublic)>()
+                      ?? panic("NFT does not exist")
+    let info: [String] = []
+
+    let nftRef = nftCollection.borrowEntireNFT(id: nftCollection.getIDs()[0])
+    info.append(nftRef.image)
+    info.append(nftRef.name)
+    return info
 }
 
 // script to list all content from ContentContract
