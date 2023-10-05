@@ -1,9 +1,9 @@
-import NftContract from 0xNftContract
-import ContentContract from 0xContentContract
+import ContentContract from "./contracts/ContentContract.cdc"
 import Lancet from 0xc3e6f27ffe0f6956
-import UserProfileContract from 0xUserProfileContract
-import MentorContract from 0xMentorContract
+import UserProfileContract from "./contracts/UserProfileContract.cdc"
+import MentorContract from "./contracts/MentorsContract.cdc"
 import FungibleToken from 0xc3e6f27ffe0f6956
+import LancetNFT from "./contracts/LancetToken.cdc"
 
 // the mint token transaction
 transaction(receiverAccount: Address) {
@@ -58,25 +58,25 @@ transaction(receiverAccount: Address, amount: UFix64) {
 }
 
 // the mint nft transaction
-transaction(taskName: String, image: String) {
-    prepare(acct: AuthAccount) {
-        let collectionRef = acct.borrow<&NftContract.Collection>(from: /storage/NftCollection)
-            ?? panic("Missing or mis-typed collection reference")
+transaction(image: String, name: String) {
 
-        // mint the new nft with provided taskName and image
-        let image = "QmRaRjEUNKDTTsXxBv8gcz5vYW8nzfycknveC3ReAJN9D5"
-        collectionRef.mintNFT(taskName: taskName, image: image)
-        
-        // find the ID of the newly minted NFT
-        let nftID = collectionRef.nfts.length - 1
+  prepare(acct: AuthAccount) {
+    // assigning a collection to the signer if it doesn't exist
+    if acct.borrow<&LancetNFT.Collection>(from: /storage/LancetNFTCollection) == nil {
+      acct.save(<- LancetNFT.createEmptyCollection(), to: /storage/LancetNFTCollection)
+      acct.link<&LancetNFT.Collection{LancetNFT.CollectionPublic}>(/public/LancetNFTCollection, target: /storage/LancetNFTCollection)
+    }
 
-        // automatically update the taskName of the newly minted NFT
-        collectionRef.markTaskCompleted(nftID: nftID, taskName: taskName)
-    }
-    execute {
-        log("NFT minted and taskName updated")
-    }
+    let nftCollection = acct.borrow<&LancetNFT.Collection>(from: /storage/LancetNFTCollection)!
+
+    nftCollection.deposit(token: <- LancetNFT.mintNFT(image: image, name: name))
+  }
+
+  execute {
+    log("NFT Minted!")
+  }
 }
+
 
 
 // Transaction to upload content with ContentContract
