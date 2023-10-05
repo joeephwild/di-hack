@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import Avatar from "react-avatar";
 
 type Props = {
   selectedCommunity: any;
@@ -15,13 +16,7 @@ const Messages = ({ selectedCommunity }: Props) => {
         {selectedCommunity?.Messages.map((item: any, i: any) => (
           <div key={i}>
             <div className="flex items-start space-x-2">
-              <Image
-                src={item?.profile_image}
-                alt={item?.profile_name}
-                width={20}
-                height={20}
-                className="w-[38px] h-[38px] rounded-[38px] object-cover"
-              />
+              <Avatar name={item?.profile_name} className="rounded-full" size="38px" />
               <div className="flex flex-col items-start">
                 <div className="flex items-center">
                   <span className="text-Black">{item?.profile_name}</span>

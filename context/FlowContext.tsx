@@ -27,7 +27,6 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState();
   const [active, setActive] = useState("learn");
   const [modalOpen, setModalOpen] = useState(false);
-  console.log(currentUser);
   const route = useRouter();
 
   // Log in function
@@ -39,7 +38,11 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
       //   setCurrentUser(User);
       // }s
       fcl.authenticate();
-      const res = fcl.currentUser().subscribe((user) => setCurrentUser(user));
+      const res = fcl
+        .currentUser()
+        .subscribe((user) =>
+          user ? setCurrentUser(user) : setCurrentUser(null)
+        );
       if (res) {
         route.push("/dashboard");
       }
@@ -68,7 +71,7 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
   //   }
   // };
 
-  // Effect to initialize Magic when the component mounts
+  // // Effect to initialize Magic when the component mounts
   useEffect(() => {
     const getCurrentUser = async () => {
       // const res = await magic.user.isLoggedIn();
@@ -76,7 +79,11 @@ export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
       //   const user = await magic.user.getInfo();
       //   setCurrentUser(user);
       // }
-      fcl.currentUser().subscribe((user) => setCurrentUser(user));
+      const res = fcl
+        .currentUser()
+        .subscribe((user) =>
+          user ? setCurrentUser(user) : setCurrentUser(null)
+        );
     };
     getCurrentUser();
   }, [currentUser]);

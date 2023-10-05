@@ -6,11 +6,11 @@ import { book, korean, profile } from "../assets/images";
 import { BellIcon } from "@heroicons/react/solid";
 import ConnectModal from "./ConnectModal";
 import Link from "next/link";
+import Avatar from "react-avatar";
 
 export default function Navbar() {
   // Get the initializeWeb3 function from the Web3 context
-  const { currentUser, modalOpen } =
-    useFlow();
+  const { currentUser, modalOpen, logIn } = useFlow();
 
   return (
     <div>
@@ -18,12 +18,7 @@ export default function Navbar() {
         <div className=""></div>
         <div>
           {!currentUser && (
-            <button
-              className="bg-Accent py-[10px]  px-[24px]"
-              onClick={fcl.authenticate({
-
-              })}
-            >
+            <button className="bg-Accent py-[10px]  px-[24px]" onClick={logIn}>
               Connect Wallet
             </button>
           )}
@@ -55,15 +50,13 @@ export default function Navbar() {
                 // onClick={logOut}
                 className="flex items-center space-x-[10px]"
               >
-                <Image
-                  src={profile}
-                  alt="profile"
-                  className="w-[20px] h-[20px] text-Black object-cover rounded-full"
-                />
-                <span className="text-Black">
-                  {currentUser.addr.slice(0, 6)}...{" "}
-                  {currentUser.addr.slice(10, 18)}
-                </span>
+                <Avatar name="joseph" className="rounded-full" size="48px" />
+                {currentUser.addr && (
+                  <span className="text-Black">
+                    {currentUser?.addr.slice(0, 6)}...
+                    {currentUser?.addr.slice(10, 18)}
+                  </span>
+                )}
               </button>
             </div>
           )}
