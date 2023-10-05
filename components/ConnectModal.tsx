@@ -49,7 +49,7 @@ const ConnectModal = () => {
         </form>
         <div className="mt-6">
           <button
-            onClick={handleLogIn}
+            // onClick={handleLogIn}
             className="bg-Accent text-white w-full rounded-lg py-3"
           >
             Submit
