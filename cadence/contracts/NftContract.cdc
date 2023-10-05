@@ -1,48 +1,88 @@
-// importing the flow module
-import FlowToken from "./interfaces/FungibleToken.cdc"
+import NonFungibleToken from "./interfaces/NonFungibleToken.cdc"
 
-pub contract NftContract {
-    pub struct NFT {
-        pub var id: UInt64
+pub contract LancentNFT: NonFungibleToken {
+
+    pub var totalSupply: UInt64
+    pub event ContractInitialized()
+    pub event Withdraw(id: UInt64, from: Address?)
+    pub event Deposit(id: UInt64, to: Address?)
+    
+    pub resource NFT: NonFungibleToken.INFT {
+        pub let id: UInt64
+
         pub var image: String
-        pub var owner: Address
-        pub var taskName: String
-        pub var taskCompleted: Bool
-    }
 
-    // define the array to store the NFTs
-    pub var nfts: [NFT]
+        pub var name: String
 
-    // initialize
-    init(_image: String) {
-        self.nfts = []
+        init(_image: String, _name: String) {
+            self.id = LancentNFT.totalSupply
+            LancentNFT.totalSupply = LancentNFT.totalSupply + 1
 
-        self.image = _image
-    }
-
-    // function to create a new NFT and assign to the caller
-    pub fun mintNFT(taskName: String, image: String) {
-        let newNFT = NFT(id: UInt64(self.nfts.length), owner: self.signer, _image: image, taskName: taskName taskCompleted: false)
-        self.nfts.append(newNFT)
-    }
-
-    // select a specific nft as completed by its owner
-    pub fun markTaskCompleted(nftID: UInt64) {
-        let nftRef = self.getNFTByID(nftID)
-        if nftRef.owner == self.signer {
-            nftRef.taskCompleted = true
-            // automatically update the task name when the task is completed
-            nftRef.taskName = "Yay, You Rock!"
+            self.image = _image
+            self.name = _name
         }
     }
 
-    // Get the NFTs owned by the caller
-    pub fun getOwnedNFTs(): [NFT] {
-        return self.nfts.filter({ $0.owner == self.signer })
+    pub resource interface CollectionPublic {
+        pub fun deposit(token: @NonFungibleToken.NFT)
+        pub fun getIDs(): [UInt64]
+        pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
+        pub fun borrowEntireNFT(id: UInt64): &NFT
+    }
+    
+    pub resource Collection: NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, CollectionPublic {
+        pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
+
+        pub fun withdraw(withdrawID: UInt64): @NonFungibleToken.NFT {
+            let token <- self.ownedNFTs.remove(key: withdrawID) ?? panic("NFT doesn't exist")
+            emit Withdraw(id: token.id, from: self.owner?.address)
+
+            return <- token
+        }
+
+        pub fun deposit(token: @NonFungibleToken.NFT) {
+            let token <- token as! @LancentNFT.NFT
+
+            emit Deposit(id: token.id, to: self.owner?.address)
+            
+            self.ownedNFTs[token.id] <-! token
+        }
+
+        pub fun getIDs(): [UInt64] {
+            return self.ownedNFTs.keys
+        }
+
+        pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT {
+            return (&self.ownedNFTs[id] as &NonFungibleToken.NFT?)!
+        }
+
+        pub fun borrowEntireNFT(id: UInt64): &NFT {
+            let ref = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT
+            return ref as! &NFT
+        }
+
+        init() {
+            self.ownedNFTs <- {}
+        }
+
+        destroy() {
+            destroy self.ownedNFTs
+        }
     }
 
-    // helper function to retrieve an NFT by its ID
-    pub fun getNFTByID(id: UInt64): &NFT {
-        return &self.nftsp[id] as &NFT
+    pub fun createEmptyCollection(): @NonFungibleToken.Collection {
+        return <- create Collection()
     }
+
+    pub fun mintNFT(
+        image: String,
+        name: String
+    ): @NFT{
+        return <- create NFT(_image: image, _name: name)
+    }
+    
+    init() {
+        self.totalSupply = 0
+    }
+
 }

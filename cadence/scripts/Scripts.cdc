@@ -1,7 +1,22 @@
 import NftContract from 0xNftContract
 import ContentContract from 0xContentContract
-import Lancet from 0xLancet
+import Lancet from 0xc3e6f27ffe0f6956
 import UserProfileContract from 0xUserProfileContract
+import FungibleToken from 0xc3e6f27ffe0f6956
+
+// to interact with the accounts
+pub fun main(account: Address){
+    let publicVault = getAccount(account).getCapability(/public/Vault)
+                        .borrow<&Lancet.Vault{FungibleToken.Balance}>()
+                        ?? panic("Could not borrow the public Vault.")
+    
+    log(publicVault.balance)
+}
+
+//to display the balance of totalSupply
+pub fun main(){
+   log(Lancet.totalSupply)
+}
 
 // script to interact with the NFT contract
 pub fun main(account: Address): [NftContract.NFT] {
@@ -21,16 +36,6 @@ pub fun listAllContent(): [ContentContract.Content] {
         ?? panic("Could not borrow ContentContract reference")
 
     return contentContractRef.listAllContent()
-}
-
-//Script to check Lancet token balance
-pub fun checkTokenBalance(): Int {
-    let lancetRef = getAccount(0xLancetAddress)
-        .getCapability<&Lancet.Collection{Lancet.CollectionPublic}>(/public/LancetCollection)
-        .borrow()
-        ?? panic("Could not borrow Lancet reference")
-
-    return lancetRef.getBalance()
 }
 
 // Script to get user profile data
