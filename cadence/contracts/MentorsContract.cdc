@@ -36,20 +36,32 @@ pub contract MentorContract {
 
     // function for a mentor to get their uploaded content
     pub fun getMentorContents(): [MentorContent] {
-        return self.mentorContents.filter({ $0.mentor == self.signer })
+        return self.mentorContents.filter(fun (mentorContents: MentorContent): Bool {
+            return mentorContent.mentor == self.signer
+        })
     }
 
     // function to withdraw earnings from the Lancet token
     pub fun withdrawEarnings(contentId: UInt64) {
-        let mentorContent = self.mentorContents.firstWhere({$0.contentId == contentId}, nil)
-        if mentorContent != nil && mentorContent!.mentor == self.signer {
+        let mentorContent = self.mentorContents.firstWhere(
+            fun (mentorContent: @MentorContent): Bool {
+                return mentorContent.contentId == contentId
+            },
+            or: panic("Mentor content not found")
+        )
+
+        if mentorContent.mentor == self.signer {
             let content = self.contentContract.get(contentId: contentId)
-            if content != nil && content!.owner == self.signer {
-                // withdraw the earning to the mentor's Lancet token balance
-                let lancetBalance = self.lancet.getBalance(account: &self.signer.load<@Lancet.Token>(from: /storage/Vault))
-                if lancetBalance >= UFix64(mentorContent!.price) {
-                    self.lancet.transfer(from: &self.signer.load<@Lancet.Token>(from: /storage/Vault), to: self.signer, amount: UFix64(mentorContent!.price))
-                    self.mentorContents.remove(at: self.mentorContents.firstIndex(of: mentorContent!)!)
+            if content.owner == self.signer {
+                // Cast the Vault resource to the appropriate type
+                let lancetTokenVault: @Lancet.Token = self.signer.load<@Lancet.Token>(from: /storage/LancetToken)
+
+                // Get the Lancet token balance
+                let lancetBalance = self.lancet.getBalance(account: lancetTokenVault)
+
+                if lancetBalance >= UFix64(mentorContent.price) {
+                    self.lancet.transfer(from: lancetTokenVault, to: self.signer, amount: UFix64(mentorContent.price))
+                    self.mentorContents.remove(at: self.mentorContents.firstIndex(of: mentorContent)!)
                 } else {
                     panic("Insufficient balance in Lancet Token")
                 }
@@ -60,4 +72,6 @@ pub contract MentorContract {
             panic("Content not found or you are not the mentor")
         }
     }
+
+
 }

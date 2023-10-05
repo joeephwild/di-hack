@@ -46,7 +46,13 @@
 	"deployments": {
 		"testnet": {
 			"testnet": [
-				"Content"
+				"Content",
+				"LancetNFT",
+				"LancetToken",
+				"FungibleToken",
+				"NonFungibleToken",
+				"MentorsContract",
+				"UserProfileContract"
 			]
 		}
 	}

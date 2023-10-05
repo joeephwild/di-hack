@@ -62,7 +62,7 @@ pub contract ContentContract {
     pub fun payForContent(contentId: UInt64) {
         let content = self.getContent(contentId: contentId)
 
-        if content == nil {
+        if content != nil {
             panic("Content not available")
         }
 
@@ -106,8 +106,9 @@ pub contract ContentContract {
     }
 
     pub fun listPremiumContent(): [Content] {
-        return self.allContent.filter({ (content: Content) -> Bool in
+        return self.allContent.filter(fun  (content: Content): Bool {
             return content.isPremium
         })
+        // return self.allContent.filter({ $0.isPremium })
     }
 }
