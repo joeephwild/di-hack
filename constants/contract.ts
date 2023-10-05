@@ -1,40 +1,47 @@
 export const getToken = `
 import Lancet from 0xc3e6f27ffe0f6956
 
-pub fun checkTokenBalance(): Int {
-    let lancetRef = getAccount(0xLancetAddress)
-        .getCapability<&Lancet.Collection{Lancet.CollectionPublic}>(/public/LancetCollection)
-        .borrow()
-        ?? panic("Could not borrow Lancet reference")
+transaction(receiverAccount: Address) {
 
-    return lancetRef.getBalance()
-}
+    prepare(acct: AuthAccount) {
+      let mint = acct.borrow<&Lancet.Mint>(from: /storage/Mint)
+                    ?? panic("We could not borrow the Mint resource")
+      
+      let newVault <- mint.mintToken(amount: 20.0)
+  
+      let receiverVault = getAccount(receiverAccount).getCapability(/public/Vault)
+                            .borrow<&Lancet.Vault{FungibleToken.Receiver}>()
+                            ?? panic("Couldn't get the public vault :(")
+      
+      receiverVault.deposit(from: <- newVault)
+    }
+  
+    execute {
+      log("Successfully deppsited tokens into receiver account")
+    }
+  }
 `;
 
 export const claimNFTS = `
-c3e6f27ffe0f6956
-transaction claimNft(taskName: String, image: String) {
-    prepare(acct: AuthAccount) {
-        let collectionRef = acct.borrow<&NftContract.Collection>(from: /storage/NftCollection)
-            ?? panic("Missing or mis-typed collection reference")
+import LancetNFT from 0xc3e6f27ffe0f6956
 
-        // mint the new nft with provided taskName and image
-        let image = "QmRaRjEUNKDTTsXxBv8gcz5vYW8nzfycknveC3ReAJN9D5"
-        collectionRef.mintNFT(taskName: taskName, image: image)
-        
-        // find the ID of the newly minted NFT
-        let nftID = collectionRef.nfts.length - 1
+pub fun main(account: Address): Int{
 
-        // automatically update the taskName of the newly minted NFT
-        collectionRef.markTaskCompleted(nftID: nftID, taskName: taskName)
-    }
-    execute {
-        log("NFT minted and taskName updated")
-    }
+    nftCollection = getAccount(account).getCapability(/public/LancetNFTCollection)
+                      .borrow<LancetNFTCollection(LancetNFT.CollectionPublic)>()
+                      ?? panic("NFT does not exist")
+    let info: [String] = []
+
+    let nftRef = nftCollection.borrowEntireNFT(id: nftCollection.getIDs()[0])
+    info.append(nftRef.image)
+    info.append(nftRef.name)
+    return info
 }
 `;
 
 export const createPodcast = `
+import ContentContract from 0xc3e6f27ffe0f6956
+
 transaction uploadContent() {
     prepare(acct: AuthAccount) {
         let contentContractRef = acct.borrow<&ContentContract.Collection>(from: /storage/ContentContractCollection)
@@ -59,6 +66,8 @@ transaction uploadContent() {
 `;
 
 export const payForContent = `
+import ContentContract from 0xc3e6f27ffe0f6956
+
 transaction payForContent(contentId: UInt64, paymentAmount: UInt64) {
     prepare(acct: AuthAccount) {
         let contentContractRef = acct.borrow<&ContentContract.Collection>(from: /storage/ContentContractCollection)
@@ -74,6 +83,8 @@ transaction payForContent(contentId: UInt64, paymentAmount: UInt64) {
 `;
 
 export const createProfile = `
+import UserProfileContract from 0xc3e6f27ffe0f6956
+
 transaction createUserProfile(username: String) {
     prepare(acct: AuthAccount) {
         let userProfileContractRef = acct.borrow<&UserProfileContract.Collection>(from: /storage/UserProfileContractCollection)

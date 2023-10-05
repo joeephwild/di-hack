@@ -28,7 +28,6 @@ export const ContractProvider = ({
   children: React.ReactNode;
 }) => {
   const { currentUser } = useFlow();
-  // console.log(currentUser)
   const claimNft = async () => {
     try {
       const authorization = fcl.currentUser().authorization;

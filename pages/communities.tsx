@@ -40,7 +40,7 @@ const Communities = () => {
     <div>
       <DefaultLayout>
         <Navbar />
-        <div className="flex items-start w-full">
+        <div className="flex items-start w-full min-h-screen overflow-y-scroll">
           {/* Left Sidebar */}
           <div className="w-[8%] h-screen bg-[#F4F5F6] border-r border-[#E4E7EC] text-white p-4 flex flex-col items-center">
             <div className="bg-Grey mt-[73px] cursor-pointer w-[70px] h-[70px] rounded-full flex items-center justify-center">

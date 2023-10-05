@@ -1,6 +1,9 @@
 import Lancet from 0xc3e6f27ffe0f6956
 
 pub contract ContentContract {
+
+    pub let signer: Address?
+
     pub struct Content {
         pub var id: UInt64
         pub var owner: Address
@@ -33,6 +36,10 @@ pub contract ContentContract {
         self.contentId = 0
     }
 
+    pub fun setSigner() {
+        self.signer = auth.getPrincipal()?.toAddress()
+    }
+
     pub fun uploadAContent(
         id_: UInt64,
         owner_: Address,
@@ -62,7 +69,7 @@ pub contract ContentContract {
     pub fun payForContent(contentId: UInt64) {
         let content = self.getContent(contentId: contentId)
 
-        if content == nil {
+        if content != nil {
             panic("Content not available")
         }
 
@@ -106,8 +113,9 @@ pub contract ContentContract {
     }
 
     pub fun listPremiumContent(): [Content] {
-        return self.allContent.filter({ (content: Content) -> Bool in
+        return self.allContent.filter(fun  (content: Content): Bool {
             return content.isPremium
         })
+        // return self.allContent.filter({ $0.isPremium })
     }
 }
