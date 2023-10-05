@@ -1,71 +1,69 @@
-import FungibleToken from 0xFungibleToken
-import NonFungibleToken from 0xNonFungibleToken
-import NFTContract from 0xNFTContract
+import LancetNFT from 0xc3e6f27ffe0f6956
+import Lancet from 0xc3e6f27ffe0f6956
 
 pub contract UserProfileContract {
-    // this defines the resources for users profiles
-    pub resource UserProfile {
-        pub(set) var address: Address
-        pub(set) var username: String
-        pub(set) var progress: UInt32
-        pub(set) var earnedNFTs: @{UInt64: NFTContract.NFT}
-        pub(set) var lancetBalance: UFix64
 
-        init(address: Address, username: String) {
-            self.address = address
-            self.username = username
-            self.progress = 0
-            self.earnedNFTs <- {}
-            self.lancetBalance = UFix64(0.0)
-        }
-    }
+    // Define the LancetNFT Collection capability
+    pub var lancetNFTCollectionCapability: @LancetNFT.Collection
 
-    // initialize
-    pub init() {}
+    // Define the LancetToken Vault capability
+    pub var lancetVaultCapability: @Lancet.Vault
 
-    // function to create a user's profile
-    pub fun createProfile(username: String): @UserProfile {
-        return <- create UserProfile(address: self.signer, username: username)
-    }
-
-    // function to get user's profile
-    pub fun getProfile(address: Address): &UserProfile {
-        return &self.account.addresses[address] as &UserProfile
-    }
-
-    // function to update the user's progress
-    pub fun updateProgress(username: String, amount: UInt32) {
-        let profile = self.getProfile(self.signer)
-        profile.progress += amount
-    }
-
-    // function to award nft to a user
-    pub fun grantNFT(username: String, nft: NFTContract.NFT) {
-        let profile = self.getProfile(self.signer)
-        profile.earnedNFTs[nft.id] = nft
-    }
-
-    // function to list earned nfts
-    pub fun listEarnedNFTs(username: String): @{UInt64: NFTContract.NFT} {
-        let profile = self.getProfile(self.signer)
-        return profile.earnedNFTs
-    }
-
-    // function to get Lancet token balance of the user
-    pub fun getLancetBalance(address: Address) UFix64 {
-        let lancetRef = getAccount(address)
-            .getCapability<&Lancet.Vault(FungibleToken.Balance)>(
-                /public.LancetReceiver
+    // Initialize the contract and obtain the LancetNFT Collection and LancetToken Vault capabilities
+    pub init() {
+        // Get the LancetNFT Collection capability
+        self.lancetNFTCollectionCapability = getAccount(self.address)
+            .getCapability<&LancetNFT.Collection{LancetNFT.CollectionPublic}>(
+                /public/LancetNFTCollection
             )
             .borrow()
-            ?? panic("Could not borrow Lancet balance reference")
-        
-        return lancetRef.balance
+            ?? panic("Could not borrow LancetNFT Collection capability")
+
+        // Get the LancetToken Vault capability
+        self.lancetVaultCapability = getAccount(self.address)
+            .getCapability<&Lancet.Vault{Lancet.Receiver}>(
+                /public/Vault
+            )
+            .borrow()
+            ?? panic("Could not borrow Lancet Vault capability")
     }
 
-    // function to update Lancet token balance on the user's profile
-    pub fun updateLancetBalance(username: String, balance: UFix64) {
-        let profile = self.getProfile(self.signer)
-        profile.lancetBalance = balance
+    // Function to view the LancetNFTs owned by the user
+    pub fun viewOwnedNFTs(): {UInt64: LancetNFT.NFT} {
+        return self.lancetNFTCollectionCapability.getIDs()
+    }
+
+    // Function to view the Lancet balance of the user
+    pub fun viewLancetBalance(): UFix64 {
+        return self.lancetVaultCapability.balance
+    }
+
+    pub fun depositNFT(nft: &LancetNFT.NFT) {
+        self.lancetNFTCollectionCapability.deposit(token: <-nft)
+    }
+
+    // Function to withdraw an NFT from the user's LancetNFT Collection
+    pub fun withdrawNFT(id: UInt64): &LancetNFT.NFT {
+        return self.lancetNFTCollectionCapability.withdraw(withdrawID: id)
+    }
+
+    // Function to get the IDs of NFTs in the user's LancetNFT Collection
+    pub fun getNFTIDs(): [UInt64] {
+        return self.lancetNFTCollectionCapability.getIDs()
+    }
+
+    // Function to deposit Lancet tokens to the user's LancetToken Vault
+    pub fun deposit(amount: UFix64) {
+        self.lancetVaultCapability.deposit(amount: amount)
+    }
+
+    // Function to withdraw Lancet tokens from the user's LancetToken Vault
+    pub fun withdraw(amount: UFix64) {
+        self.lancetVaultCapability.withdraw(amount: amount)
+    }
+
+    // Function to get the balance of Lancet tokens in the user's LancetToken Vault
+    pub fun getLancetBalance(): UFix64 {
+        return self.lancetVaultCapability.balance
     }
 }
