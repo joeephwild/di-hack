@@ -1,8 +1,10 @@
 import React from "react";
-import ChatApp from '../components/Chatpage/ChatApp';
+import ChatApp from '../components/ChatPage/ChatApp';
 import DefaultLayout from "../layouts/DefaultLayout";
 import Navbar from "../components/Navbar";
-import {RealTimeChat, LoginPage, MagicLink}  from "../components/Chatpage/RealTimeChat";
+import { RealTimeChat }  from "../components/ChatPage/RealTimeChat";
+import { MagicLink } from "../components/ChatPage/MagicLink";
+import { LoginPage } from "../components/ChatPage/LoginPage";
 
 
 
