@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { auth } from '../../firebase';
+import { signInWithEmailLink } from 'firebase/auth';
 
 function MagicLinkPage() {
   const router = useRouter();
@@ -8,9 +10,7 @@ function MagicLinkPage() {
   useEffect(() => {
     if (magicToken) {
       // Authenticate the user using Firebase Authentication
-      firebase
-        .auth()
-        .signInWithEmailLink('', magicToken)
+      signInWithEmailLink(auth, '', magicToken as string) // Assuming magicToken is a string
         .then((userCredential) => {
           const user = userCredential.user;
           // Redirect the user to the chat page or a desired location

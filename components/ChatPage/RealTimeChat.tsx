@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
-import { useFlow } from "../../context/FlowContext";
+import { ref, onChildAdded, off, push } from "firebase/database";
 import { auth, db } from "../../firebase";
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyACWp-N8oSQIEDEfr-WkGPxIwYwGZydij4",
@@ -22,21 +13,26 @@ const firebaseConfig = {
   appId: "1:388128287208:web:22e1bf229fc29edb909c5d"
 };
 
+interface Message {
+  text: string;
+  sender: string;
+  timestamp: number;
+}
+
 function RealTimeChat() {
-  const [messageInput, setMessageInput] = useState('');
+  const [messageInput, setMessageInput] = useState<string>('');
+  const [messages, setMessages] = useState<Message[]>([]);
   const user = auth.currentUser;
 
   useEffect(() => {
     const chatRef = ref(db, 'chat');
 
-    // listen for new messages
     onChildAdded(chatRef, (snapshot) => {
-      const newMessage = snapshot.val();
+      const newMessage: Message = snapshot.val();
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
     return () => {
-      // unsubscribe from firebase realtime database
       off(chatRef);
     };
   }, [db]);
@@ -44,11 +40,10 @@ function RealTimeChat() {
   const handleSendMessage = () => {
     if (messageInput.trim() === '') return;
 
-    // send the message to firebase realtime database
     const chatRef = ref(db, 'chat');
-    const newMessage = {
+    const newMessage: Message = {
       text: messageInput,
-      sender: user.displayName || 'anonymous',
+      sender: user?.displayName || 'anonymous',
       timestamp: Date.now(),
     };
 
@@ -58,10 +53,20 @@ function RealTimeChat() {
 
   return (
     <div>
-      Chat App
+      {messages.map((message, index) => (
+        <div key={index}>
+          {message.sender}: {message.text}
+        </div>
+      ))}
+      <input
+        type="text"
+        placeholder="Type your message..."
+        value={messageInput}
+        onChange={(e) => setMessageInput(e.target.value)}
+      />
+      <button onClick={handleSendMessage}>Send</button>
     </div>
   );
 }
 
 export default RealTimeChat;
- 
