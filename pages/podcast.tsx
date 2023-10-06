@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import DefaultLayout from "../layouts/DefaultLayout";
 import Navbar from "../components/Navbar";
 import PodcastCard from "../components/podcast/PodcastCard";
@@ -8,23 +8,17 @@ import { config, send, decode } from "@onflow/fcl"
 
 
 
-(async () => {
-  await config({
-    "accessNode.api": "https://rest-testnet.onflow.org",
-    "discovery.wallet": "https://fcl-discovery.onflow.org/testnet/authn",
-  });
 
 
-    
-const Podcast = () => {
-  const route = useRouter();
+  const Podcast = () => {
+    const route = useRouter();
 
-  
 
-  useEffect(() => {
-    async function fetchContractData() {
-      //defining transaction
-      const transaction = `
+
+    useEffect(() => {
+      async function fetchContractData() {
+        //defining transaction
+        const transaction = `
       transaction payForContent(contentId: UInt64, paymentAmount: UInt64) {
         prepare(acct: AuthAccount) {
             let contentContractRef = acct.borrow<&ContentContract.Collection>(from: /storage/ContentContractCollection)
@@ -38,51 +32,52 @@ const Podcast = () => {
         }
       }`;
 
-    
-
-      const response = await send([
-        () => transaction,
-      ]);
-
-      const data =await decode(response)
-
-      console.log(data)
-      
-    }
-
-    fetchContractData();
-
-  }, [])
 
 
+        const response = await send([
+          () => transaction,
+        ]);
+
+        const data = await decode(response);
+
+        console.log(data);
+
+      }
+
+      fetchContractData();
+
+    }, []);
 
 
-  return (
-    <DefaultLayout>
-      <Navbar />
-      <div className="text-Black my-[41px] mx-[40px]">
-        <span className="text-[24px] font-normal">Podcast</span>
-        <div className="flex items-center justify-around space-x-9 w-full">
-          <div className="flex bg-white border border-Grey p-5 items-start space-x-5 w-[90%]">
-            <SearchIcon className="w-[24px] h-[24px] object-contain" />
-            <input
-              placeholder="Search podcasts"
-              className="w-full border-none outline-none bg-transparent"
-            />
+
+
+    return (
+      <DefaultLayout>
+        <Navbar />
+        <div className="text-Black my-[41px] mx-[40px]">
+          <span className="text-[24px] font-normal">Podcast</span>
+          <div className="flex items-center justify-around space-x-9 w-full">
+            <div className="flex bg-white border border-Grey p-5 items-start space-x-5 w-[90%]">
+              <SearchIcon className="w-[24px] h-[24px] object-contain" />
+              <input
+                placeholder="Search podcasts"
+                className="w-full border-none outline-none bg-transparent"
+              />
+            </div>
+            <button
+              onClick={() => route.push("/uploadAPodcast")}
+              className="bg-Accent w-[10%] py-[10px] text-[14px] font-medium text-Black"
+            >
+              Upload Podcast
+            </button>
           </div>
-          <button
-            onClick={() => route.push("/uploadAPodcast")}
-            className="bg-Accent w-[10%] py-[10px] text-[14px] font-medium text-Black"
-          >
-            Upload Podcast
-          </button>
+          <div className="flex flex-wrap items-center gap-x-[33px] mt-[62px]">
+            <PodcastCard />
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-x-[33px] mt-[62px]">
-          <PodcastCard />
-        </div>
-      </div>
-    </DefaultLayout>
-  );
-};
+      </DefaultLayout>
+    );
+  };
+  
+  export default Podcast;
 
-export default Podcast;
