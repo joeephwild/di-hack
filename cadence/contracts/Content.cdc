@@ -1,6 +1,9 @@
 import Lancet from 0xc3e6f27ffe0f6956
 
 pub contract ContentContract {
+
+    pub let signer: Address?
+
     pub struct Content {
         pub var id: UInt64
         pub var owner: Address
@@ -31,6 +34,10 @@ pub contract ContentContract {
         self.allContent = []
         self.addressToContent = {}
         self.contentId = 0
+    }
+
+    pub fun setSigner() {
+        self.signer = auth.getPrincipal()?.toAddress()
     }
 
     pub fun uploadAContent(

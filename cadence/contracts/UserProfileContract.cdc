@@ -4,14 +4,12 @@ import Lancet from 0xc3e6f27ffe0f6956
 pub contract UserProfileContract {
 
     // Define the LancetNFT Collection capability
-    pub var lancetNFTCollectionCapability: @LancetNFT.Collection
-
-    // Define the LancetToken Vault capability
+    pub var lancetNFTCollectionCapability: @LancetNFT.Collection{LancetNFT.CollectionPublic}
     pub var lancetVaultCapability: @Lancet.Vault
+    pub var address: Address
 
-    // Initialize the contract and obtain the LancetNFT Collection and LancetToken Vault capabilities
-    pub init() {
-        // Get the LancetNFT Collection capability
+    init() {
+        self.address = self.account.address
         self.lancetNFTCollectionCapability = getAccount(self.address)
             .getCapability<&LancetNFT.Collection{LancetNFT.CollectionPublic}>(
                 /public/LancetNFTCollection
@@ -19,7 +17,6 @@ pub contract UserProfileContract {
             .borrow()
             ?? panic("Could not borrow LancetNFT Collection capability")
 
-        // Get the LancetToken Vault capability
         self.lancetVaultCapability = getAccount(self.address)
             .getCapability<&Lancet.Vault{Lancet.Receiver}>(
                 /public/Vault

@@ -2,6 +2,7 @@ import ContentContract from "./Content.cdc"
 import Lancet from 0xc3e6f27ffe0f6956
 
 pub contract MentorContract {
+    pub let signer: Address?
     // struct to hold information about a mentor's content
     pub struct MentorContent {
         pub var contentId: UInt64
@@ -26,6 +27,9 @@ pub contract MentorContract {
         self.lancet = lancet
     }
 
+    pub fun getSigner() {
+        self.signer = auth.getPrincipal()?.toAddress
+    }
     // function for a mentor to upload a content
     pub fun uploadContent(title: String, price: UInt64) {
         let contentId = self.contentContract.getNewContentId()
