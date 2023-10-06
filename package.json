@@ -25,6 +25,7 @@
     "@magic-ext/flow": "^15.0.3",
     "@onflow/fcl": "^1.6.0",
     "@onflow/typedefs": "1.1.0",
+    "@rainbow-me/rainbowkit": "^1.1.0",
     "firebase": "^10.4.0",
     "magic-sdk": "^20.0.2",
     "next": "13.0.0",
@@ -34,6 +35,8 @@
     "react-dom": "18.2.0",
     "react-modal": "^3.16.1",
     "tailwind-scrollbar-hide": "^1.1.7",
+    "viem": "^1.15.4",
+    "wagmi": "^1.4.3",
     "web3": "^4.1.2"
   },
   "devDependencies": {

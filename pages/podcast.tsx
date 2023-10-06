@@ -1,12 +1,62 @@
-import React from "react";
+import React, {useEffect} from "react";
 import DefaultLayout from "../layouts/DefaultLayout";
 import Navbar from "../components/Navbar";
 import PodcastCard from "../components/podcast/PodcastCard";
 import { SearchIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
+import { config, send, decode } from "@onflow/fcl"
 
+
+
+(async () => {
+  await config({
+    "accessNode.api": "https://rest-testnet.onflow.org",
+    "discovery.wallet": "https://fcl-discovery.onflow.org/testnet/authn",
+  });
+
+
+    
 const Podcast = () => {
   const route = useRouter();
+
+  
+
+  useEffect(() => {
+    async function fetchContractData() {
+      //defining transaction
+      const transaction = `
+      transaction payForContent(contentId: UInt64, paymentAmount: UInt64) {
+        prepare(acct: AuthAccount) {
+            let contentContractRef = acct.borrow<&ContentContract.Collection>(from: /storage/ContentContractCollection)
+                ?? panic("Missing or mis-typed ContentContract reference")
+    
+            // Pay for content using LancetToken
+            contentContractRef.payForContent(contentId: contentId, paymentAmount: paymentAmount)
+        }
+        execute {
+            log("Content purchased with LancetToken")
+        }
+      }`;
+
+    
+
+      const response = await send([
+        () => transaction,
+      ]);
+
+      const data =await decode(response)
+
+      console.log(data)
+      
+    }
+
+    fetchContractData();
+
+  }, [])
+
+
+
+
   return (
     <DefaultLayout>
       <Navbar />
