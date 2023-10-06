@@ -33,7 +33,10 @@ pub contract UserProfileContract {
     }
 
     // Function to view the LancetNFTs owned by the user
-    pub fun viewOwnedNFTs(): {UInt64: LancetNFT.NFT} {
+    // pub fun viewOwnedNFTs(): {UInt64: LancetNFT.NFT} {
+    //     return self.lancetNFTCollectionCapability.getIDs()
+    // }
+    pub fun viewOwnedNFTs(): [UInt64] {
         return self.lancetNFTCollectionCapability.getIDs()
     }
 

@@ -7,7 +7,7 @@ transaction(receiverAccount: Address) {
     let mint = acct.borrow<&Lancet.Mint>(from: /storage/Mint)
                   ?? panic("We could not borrow the Mint resource")
     
-    let newVault <- mint.mintToken(amount: 20.0)
+    let newVault <- mint.mintToken(amount: 50.0)
 
     let receiverVault = getAccount(receiverAccount).getCapability(/public/Vault)
                           .borrow<&Lancet.Vault{FungibleToken.Receiver}>()

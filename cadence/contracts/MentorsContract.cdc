@@ -31,7 +31,7 @@ pub contract MentorContract {
         return self.signer!
     }
     // function for a mentor to upload a content
-    pub fun uploadContent(title: String, price: UInt64) {
+    pub fun uploadContent(title: String, price: UFix64) {
         if self.signer == nil {
             panic("Signer not set")
         }
