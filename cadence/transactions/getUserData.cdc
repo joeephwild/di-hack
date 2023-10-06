@@ -1,9 +1,9 @@
 transaction {
     prepare(signer: AuthAccount) {
         let userProfileContract <- UserProfileContract.init(
-            learningLanguage: "English",
-            speakingLanguage: "Spanish",
-            username: "user123"
+            learningLanguage: "Mandarin",
+            speakingLanguage: "English",
+            username: "ebbiaden"
         )
 
         signer.save(<-userProfileContract, to: /storage/UserProfileContract)
