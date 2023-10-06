@@ -28,7 +28,7 @@ pub contract ContentContract {
 
     pub var allContent: [Content]
     pub var contentId: UInt64
-    pub var addressToContent: {Address: Content}
+    pub var addressToContent: {Address: Content?}
 
     init() {
         self.allContent = []
@@ -36,8 +36,8 @@ pub contract ContentContract {
         self.contentId = 0
     }
 
-    pub fun setSigner() {
-        self.signer = auth.getPrincipal()?.toAddress()
+    pub fun setSigner(signer: Address) {
+        self.signer = signer
     }
 
     pub fun uploadAContent(
@@ -69,34 +69,34 @@ pub contract ContentContract {
     pub fun payForContent(contentId: UInt64) {
         let content = self.getContent(contentId: contentId)
 
-        if content != nil {
+        if content == nil {
             panic("Content not available")
         }
 
-        if content!.owner == self.signer {
+        if content?.owner == self.signer {
             panic("Content is already owned by the caller")
         }
 
         // Access Lancet contract using its interface
-        let lancetRef = getAccount(self.address)
+        let lancetRef = getAccount(self.signer)
             .getCapability<&Lancet.Token{Lancet.Receiver}>(
                 /public/LancetTokenReceiver
             )
             .borrow()
             ?? panic("Could not borrow Lancet Token Receiver capability")
 
-        if lancetRef.balance < content!.price {
+        if lancetRef.balance < content?.price {
             panic("Insufficient Lancet token balance")
         }
 
         // Transfer Lancet tokens to the content owner
-        let receiver = content!.owner
-        let amount = content!.price
+        let receiver = content?.owner
+        let amount = content?.price
 
         lancetRef.transfer(to: receiver, amount: amount)
 
         // Update the owner of the content
-        content!.owner = self.signer
+        content?.owner = self.signer
 
         log("Content purchased successfully")
     }
