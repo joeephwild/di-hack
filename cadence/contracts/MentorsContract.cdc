@@ -27,11 +27,14 @@ pub contract MentorContract {
         self.lancet = lancet
     }
 
-    pub fun getSigner() {
-        self.signer = auth.getPrincipal()?.toAddress
+    pub fun getSigner(): Address {
+        return self.signer!
     }
     // function for a mentor to upload a content
-    pub fun uploadContent(title: String, price: UInt64) {
+    pub fun uploadContent(title: String, price: UFix64) {
+        if self.signer == nil {
+            panic("Signer not set")
+        }
         let contentId = self.contentContract.getNewContentId()
         let mentorContent = MentorContent(contentId: contentId, mentor: self.signer, title: title, price: price)
         self.mentorContents.append(mentorContent)
@@ -41,14 +44,17 @@ pub contract MentorContract {
     // function for a mentor to get their uploaded content
     pub fun getMentorContents(): [MentorContent] {
         return self.mentorContents.filter(fun (mentorContents: MentorContent): Bool {
-            return mentorContent.mentor == self.signer
+            return mentorContents.mentor == self.signer
         })
     }
 
     // function to withdraw earnings from the Lancet token
     pub fun withdrawEarnings(contentId: UInt64) {
+        if self.signer == nil {
+            panic("Signer is not set")
+        }
         let mentorContent = self.mentorContents.firstWhere(
-            fun (mentorContent: @MentorContent): Bool {
+            fun (mentorContent: MentorContent): Bool {
                 return mentorContent.contentId == contentId
             },
             or: panic("Mentor content not found")
@@ -58,13 +64,13 @@ pub contract MentorContract {
             let content = self.contentContract.get(contentId: contentId)
             if content.owner == self.signer {
                 // Cast the Vault resource to the appropriate type
-                let lancetTokenVault: @Lancet.Token = self.signer.load<@Lancet.Token>(from: /storage/LancetToken)
+                let lancetTokenVault: @Lancet.Token = self.signer!.load<@Lancet.Token>(from: /storage/LancetToken)
 
                 // Get the Lancet token balance
                 let lancetBalance = self.lancet.getBalance(account: lancetTokenVault)
 
                 if lancetBalance >= UFix64(mentorContent.price) {
-                    self.lancet.transfer(from: lancetTokenVault, to: self.signer, amount: UFix64(mentorContent.price))
+                    self.lancet.transfer(from: lancetTokenVault, to: self.signer!, amount: UFix64(mentorContent.price))
                     self.mentorContents.remove(at: self.mentorContents.firstIndex(of: mentorContent)!)
                 } else {
                     panic("Insufficient balance in Lancet Token")
@@ -76,6 +82,5 @@ pub contract MentorContract {
             panic("Content not found or you are not the mentor")
         }
     }
-
 
 }

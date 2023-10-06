@@ -7,8 +7,11 @@ pub contract UserProfileContract {
     pub var lancetNFTCollectionCapability: @LancetNFT.Collection{LancetNFT.CollectionPublic}
     pub var lancetVaultCapability: @Lancet.Vault
     pub var address: Address
+    pub var learningLanguage: String
+    pub var speakingLanguage: String
+    pub var username: String
 
-    init() {
+    init(learningLanguage: String, speakingLanguage: String, username: String) {
         self.address = self.account.address
         self.lancetNFTCollectionCapability = getAccount(self.address)
             .getCapability<&LancetNFT.Collection{LancetNFT.CollectionPublic}>(
@@ -23,10 +26,17 @@ pub contract UserProfileContract {
             )
             .borrow()
             ?? panic("Could not borrow Lancet Vault capability")
+
+        self.learningLanguage = learningLanguage
+        self.speakingLanguage = speakingLanguage
+        self.username = username
     }
 
     // Function to view the LancetNFTs owned by the user
-    pub fun viewOwnedNFTs(): {UInt64: LancetNFT.NFT} {
+    // pub fun viewOwnedNFTs(): {UInt64: LancetNFT.NFT} {
+    //     return self.lancetNFTCollectionCapability.getIDs()
+    // }
+    pub fun viewOwnedNFTs(): [UInt64] {
         return self.lancetNFTCollectionCapability.getIDs()
     }
 
@@ -62,5 +72,17 @@ pub contract UserProfileContract {
     // Function to get the balance of Lancet tokens in the user's LancetToken Vault
     pub fun getLancetBalance(): UFix64 {
         return self.lancetVaultCapability.balance
+    }
+
+    pub fun getSpeakingLanguage(): String {
+        return self.speakingLanguage
+    }
+
+    pub fun getLearningLanguage(): String {
+        return self.learningLanguage
+    }
+
+    pub fun getUsername(): String {
+        return self.username
     }
 }
