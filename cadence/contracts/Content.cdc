@@ -26,14 +26,34 @@ pub contract ContentContract {
         }
     }
 
+    pub struct Podcast {
+        pub var id: UInt64
+        pub var owner: Address
+        pub var title: String
+        pub var file: String
+
+        init(id: UInt64, owner: Address, title: String, file: String) {
+            self.id = id
+            self.owner = owner
+            self.title = title
+            self.file = file
+        }
+    }
+
     pub var allContent: [Content]
     pub var contentId: UInt64
     pub var addressToContent: {Address: Content?}
+    pub var allPodcasts: [Podcast]
+    pub var podcastId: UInt64
+    pub var addressToPodcast: {Address: Podcast?}
 
     init() {
         self.allContent = []
         self.addressToContent = {}
         self.contentId = 0
+        self.allPodcasts = []
+        self.addressToPodcast = {}
+        self.podcastId = 0
     }
 
     pub fun setSigner(signer: Address) {
@@ -63,6 +83,25 @@ pub contract ContentContract {
 
         self.allContent.append(content)
         self.addressToContent[owner_] = content
+    }
+
+    pub fun uploadPodcast(
+        id_: UInt64,
+        owner_: Address,
+        title_: String,
+        file_: String
+    ) {
+        // self.podcastId = self.podcastId + 1
+
+        let podcast = Podcast(
+            id: id_,
+            owner: owner_,
+            title: title_,
+            file: file_
+        )
+
+        self.allPodcasts.append(podcast)
+        self.addressToPodcast[owner_] = podcast
     }
 
     // Function to purchase content using Lancet tokens
@@ -106,6 +145,17 @@ pub contract ContentContract {
             return self.allContent[contentId]
         }
         return nil
+    }
+
+    pub fun getPodcast(podcastId: UInt64): Podcast? {
+        if podcastId < UInt64(self.allPodcasts.length) {
+            return self.allPodcasts[podcastId]
+        }
+        return nil
+    }
+
+    pub fun listAllPodcasts(): [Podcast] {
+        return self.allPodcasts
     }
 
     pub fun listAllContent(): [Content] {
