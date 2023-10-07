@@ -2,21 +2,14 @@ import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useFlow } from "./FlowContext";
 
-// Define the type for the user context.
-type UserContextType = {
-  checkIfUserExist: () => void;
-  selectedSpeakLanguage: any
-  selectedLearnLanguage: any
-};
-
 // Create a context for user data.
-const UserContext = createContext<UserContextType | null>(null);
+const UserContext = createContext();
 
 // Custom hook for accessing user context data.
 export const useUser = () => useContext(UserContext);
 
 // Provider component that wraps parts of the app that need user context.
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+export const UserProvider = ({ children }) => {
   const [selectedSpeakLanguage, setSelectedSpeakLanguage] = useState(null);
   const [selectedLearnLanguage, setSelectedLearnLanguage] = useState(null);
   const router = useRouter();

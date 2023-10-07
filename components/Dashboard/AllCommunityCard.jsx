@@ -3,21 +3,11 @@ import Image, { StaticImageData } from "next/image";
 import React from "react";
 import { korean } from "../../assets/images";
 
-type Props = {
-  name: string;
-  author: string;
-  audio_file: string;
-  image: StaticImageData;
-  desc: string;
-};
 
 const AllCommunitiesCard = ({
-  audio_file,
-  author,
   image,
   name,
-  desc,
-}: Props) => {
+}) => {
   return (
     <div className="bg-white cursor-pointer w-[256px] h-[112px] py-2 px-4 shadow-md rounded-lg">
       <div className="flex items-center w-full">

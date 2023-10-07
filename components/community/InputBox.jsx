@@ -11,11 +11,7 @@ import {
 import { db } from "../../firebase";
 import { useFlow } from "../../context/FlowContext";
 
-type Props = {
-  selectedCommunity: any;
-};
-
-const InputBox = ({ selectedCommunity }: Props) => {
+const InputBox = ({selectedCommunity}) => {
   const { currentUser } = useFlow();
   const [message, setMessage] = useState("");
   const sendAMessage = async (communityId) => {

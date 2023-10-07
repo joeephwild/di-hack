@@ -10,7 +10,7 @@ function MagicLinkPage() {
   useEffect(() => {
     if (magicToken) {
       // Authenticate the user using Firebase Authentication
-      signInWithEmailLink(auth, '', magicToken as string) // Assuming magicToken is a string
+      signInWithEmailLink(auth, '',) // Assuming magicToken is a string
         .then((userCredential) => {
           const user = userCredential.user;
           // Redirect the user to the chat page or a desired location

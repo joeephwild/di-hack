@@ -1,11 +1,8 @@
 import { UserIcon } from "@heroicons/react/solid";
 import React from "react";
 
-type Props = {
-  selectedCommunity: any;
-};
 
-const CommunityCard = ({ selectedCommunity }: Props) => {
+const CommunityCard = ({selectedCommunity}) => {
   return (
     <div className="bg-[#F4F5F6] w-[90%] h-[112px] py-[19px] px-[27px]">
       <div className="flex items-start">

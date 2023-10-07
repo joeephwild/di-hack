@@ -2,15 +2,7 @@ import { ClockIcon, PlayIcon } from "@heroicons/react/solid";
 import Image, { StaticImageData } from "next/image";
 import React from "react";
 
-type Props = {
-  name: string;
-  author: string;
-  audio_file: string;
-  image: StaticImageData;
-  desc: string;
-};
-
-const PodcastCard = ({ audio_file, author, image, name, desc }: Props) => {
+const PodcastCard = ({ audio_file, author, image, name, desc }) => {
   return (
     <div className="bg-white cursor-pointer w-full py-4 px-4 shadow-md rounded-lg">
       <div className="flex items-center w-full">

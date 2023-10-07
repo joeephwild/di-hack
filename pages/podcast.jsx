@@ -6,47 +6,37 @@ import { SearchIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { config, send, decode } from "@onflow/fcl"
 
-
-
-
-
   const Podcast = () => {
     const route = useRouter();
-
-
-
-    useEffect(() => {
-      async function fetchContractData() {
-        //defining transaction
-        const transaction = `
-      transaction payForContent(contentId: UInt64, paymentAmount: UInt64) {
-        prepare(acct: AuthAccount) {
-            let contentContractRef = acct.borrow<&ContentContract.Collection>(from: /storage/ContentContractCollection)
-                ?? panic("Missing or mis-typed ContentContract reference")
+    // useEffect(() => {
+    //   async function fetchContractData() {
+    //     //defining transaction
+    //     const transaction = `
+    //   transaction payForContent(contentId: UInt64, paymentAmount: UInt64) {
+    //     prepare(acct: AuthAccount) {
+    //         let contentContractRef = acct.borrow<&ContentContract.Collection>(from: /storage/ContentContractCollection)
+    //             ?? panic("Missing or mis-typed ContentContract reference")
     
-            // Pay for content using LancetToken
-            contentContractRef.payForContent(contentId: contentId, paymentAmount: paymentAmount)
-        }
-        execute {
-            log("Content purchased with LancetToken")
-        }
-      }`;
+    //         // Pay for content using LancetToken
+    //         contentContractRef.payForContent(contentId: contentId, paymentAmount: paymentAmount)
+    //     }
+    //     execute {
+    //         log("Content purchased with LancetToken")
+    //     }
+    //   }`;
+    //     const response = await send([
+    //       () => transaction,
+    //     ]);
 
+    //     const data = await decode(response);
 
+    //     console.log(data);
 
-        const response = await send([
-          () => transaction,
-        ]);
+    //   }
 
-        const data = await decode(response);
+    //   fetchContractData();
 
-        console.log(data);
-
-      }
-
-      fetchContractData();
-
-    }, []);
+    // }, []);
 
 
 

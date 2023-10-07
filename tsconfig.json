@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "components/Dashboard/AllCommunityCard.tsx", "lib/magic.ts"  ],
+, "components/Dashboard/AllCommunityCard.jsx", "lib/magic.js", "components/ChatPage/RealTimeChat.jsx", "components/ChatPage/MagicLink.jsx", "components/ChatPage/LoginPage.jsx", "components/ChatPage/ChatApp.jsx", "components/AiChat/InputBox.jsx", "components/AiChat/index.js", "components/AiChat/ChatCompoents.jsx", "firebase.js", "utils/index.jsx", "pages/uploadAPodcast.jsx", "pages/quiz.jsx", "pages/profileOnboarding.jsx", "pages/podcast.jsx", "pages/index.jsx", "pages/dashboard.jsx", "pages/communities.jsx", "pages/beAMentor.jsx", "pages/aichat.jsx", "pages/_app.jsx", "lib/mindb.js", "lib/getToken.js", "layouts/DefaultLayout.jsx", "context/UserContext.jsx", "context/FlowContext.jsx", "context/ContractProvider.jsx", "constants/contract.js", "components/Sidebar.jsx", "components/Navbar.jsx", "components/Links.jsx", "components/quiz/WinModal.jsx", "components/quiz/index.js", "components/quiz/FailedModal.jsx", "components/index.jsx", "components/Container.jsx", "components/ConnectModal.jsx", "components/podcast/PodcastCard.jsx", "components/Dashboard/PodcastCard.jsx", "components/Dashboard/NfTBadge.jsx", "components/Dashboard/LearnAiCard.jsx", "components/Dashboard/IntroCard.jsx", "components/Dashboard/index.js", "components/Dashboard/DashboardLeft.jsx", "components/Dashboard/DahboardRight.jsx", "components/Dashboard/AllMentorCard.jsx", "components/community/Messages.jsx", "components/community/InputBox.jsx", "components/community/index.jsx", "components/community/CommunityCard.jsx"  ],
   "exclude": [
     "node_modules"
   ]

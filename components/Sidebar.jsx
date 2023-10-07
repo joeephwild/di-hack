@@ -9,7 +9,7 @@ const Sidebar = () => {
   const { setActive, active } = useFlow();
   const route = useRouter();
 
-  const handleRoute = (item: string, routePath: string) => {
+  const handleRoute = (item, routePath) => {
     setActive(item);
     route.push(routePath);
   };

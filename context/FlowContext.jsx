@@ -2,27 +2,14 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import * as fcl from "@onflow/fcl";
 import { useRouter } from "next/router";
 
-
-// Define the structure of the Flow context state
-type FlowContextType = {
-  currentUser: any;
-  logIn: () => Promise<void>;
-  // logOut: () => void;
-  setActive: React.Dispatch<React.SetStateAction<string>>;
-  active: string;
-  modalOpen: boolean;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  // openWallet: () => Promise<void>;
-};
-
 // Create the context with default values
-const FlowContext = createContext<FlowContextType | undefined>(undefined);
+const FlowContext = createContext(undefined);
 
 // Custom hook to use the Flow context
 export const useFlow = () => useContext(FlowContext);
 
 // Provider component to wrap around components that need access to the context
-export const FlowProvider = ({ children }: { children: React.ReactNode }) => {
+export const FlowProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [active, setActive] = useState("learn");
   const [modalOpen, setModalOpen] = useState(false);

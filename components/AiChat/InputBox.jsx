@@ -5,12 +5,8 @@ import { db } from "../../firebase";
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
 import { useFlow } from "../../context/FlowContext";
 
-type Props = {
-  text: string;
-  setText: React.Dispatch<React.SetStateAction<string>>;
-};
 
-const InputBox = ({ setText, text }: Props) => {
+const InputBox = ({ setText, text }) => {
   const [loading, setIsLoading] = useState(false);
   const { currentUser } = useFlow();
   const sendMessage = async () => {

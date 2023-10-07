@@ -1,24 +1,12 @@
 import React, { useState } from 'react';
-import RealTimeChat from './RealTimeChat';
-
-interface Message {
-  text: string;
-  sender: string;
-}
-
-interface UserProfile {
-  id: number;
-  name: string;
-  lastMessage: string;
-  messages: Message[];
-}
+import RealTimeChat from './RealTimeChat.jsx';
 
 function ChatApp() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [messageInput, setMessageInput] = useState<string>('');
-  const [showPersonalChat, setShowPersonalChat] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
-  const [userProfiles, setUserProfiles] = useState<UserProfile[]>([
+  const [messages, setMessages] = useState([]);
+  const [messageInput, setMessageInput] = useState('');
+  const [showPersonalChat, setShowPersonalChat] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [userProfiles, setUserProfiles] = useState([
     { id: 1, name: 'User 1', lastMessage: 'Hello', messages: [] },
     { id: 2, name: 'User 2', lastMessage: 'Hi there', messages: [] },
     { id: 3, name: 'User 3', lastMessage: 'Hey, Whatsup', messages: [] },
@@ -30,7 +18,7 @@ function ChatApp() {
   const handleSendMessage = () => {
     if (messageInput.trim() === '') return;
 
-    const newMessage: Message = {
+    const newMessage = {
       text: messageInput,
       sender: 'current_user',
     };
@@ -47,7 +35,7 @@ function ChatApp() {
     setMessageInput('');
   };
 
-  const handleOpenPersonalChat = (user: UserProfile) => {
+  const handleOpenPersonalChat = (user) => {
     setSelectedUser(user);
     setShowPersonalChat(true);
   };

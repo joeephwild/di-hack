@@ -12,20 +12,14 @@ fcl.config({
   "app.detail.title": "Lacent Dapp",
 });
 
-type ContractContextType = {
-  claimNft: () => Promise<void>;
-  uploadAPodcast: () => Promise<void>;
-};
 
-const ContractContext = createContext<ContractContextType | null>(null);
+const ContractContext = createContext();
 
 // Custom hook to use the Flow context
 export const useContract = () => useContext(ContractContext);
 
 export const ContractProvider = ({
   children,
-}: {
-  children: React.ReactNode;
 }) => {
   const { currentUser } = useFlow();
   const claimNft = async () => {
@@ -40,10 +34,10 @@ export const ContractProvider = ({
           ),
           arg("Level 1 Korean Badge", t.String),
         ],
-        payer: authorization as unknown as Function,
+        payer: authorization,
         limit: 9999,
-        proposer: authorization as unknown as Function,
-        authorizations: [authorization as unknown as Function],
+        proposer: authorization,
+        authorizations: [authorization],
       });
     } catch (error) {
       console.log(error);
@@ -62,10 +56,10 @@ export const ContractProvider = ({
           ),
           arg("Level 1 Korean Badge", t.String),
         ],
-        payer: authorization as unknown as Function,
+        payer: authorization,
         limit: 9999,
-        proposer: authorization as unknown as Function,
-        authorizations: [authorization as unknown as Function],
+        proposer: authorization,
+        authorizations: [authorization],
       });
     } catch (error) {
       console.log(error);

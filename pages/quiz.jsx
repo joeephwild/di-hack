@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from "react";
-// import { quizData } from "../utils/index";
 import DefaultLayout from "../layouts/DefaultLayout";
 import Navbar from "../components/Navbar";
 import { HeartIcon, XIcon } from "@heroicons/react/solid";
-import { useUser } from "../context/UserContext";
-import { collection, onSnapshot, query } from "firebase/firestore";
-import { db } from "../firebase";
 import { quizDataKoreanToEnglish } from "../utils";
-import ReactModal from "react-modal";
 import { useRouter } from "next/router";
 import { useFlow } from "../context/FlowContext";
-import Image from "next/image";
-import { badges } from "../assets/images";
 import { FailedModal, WinModal } from "../components/quiz";
 
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [userAnswers, setUserAnswers] = useState<string[]>([]);
+  const [userAnswers, setUserAnswers] = useState([]);
   const [lives, setLives] = useState(5);
   const [gameOver, setGameOver] = useState(false);
-  const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
-  const [wrongAnswers, setWrongAnswers] = useState<string[]>([]);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [correctAnswers, setCorrectAnswers] = useState([]);
+  const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -35,7 +28,7 @@ const Quiz = () => {
   }, [gameOver]);
 
   const question = quizDataKoreanToEnglish[currentQuestion];
-  const handleSelectAnswer = (answer: string) => {
+  const handleSelectAnswer = (answer) => {
     setSelectedAnswer(answer);
     if (answer === question.correctAnswer.toLowerCase()) {
       setCorrectAnswer(true);
