@@ -1,5 +1,6 @@
 {
 	"contracts": {
+		"Communities": "./cadence/contracts/Communities.cdc",
 		"Content": "cadence/contracts/Content.cdc",
 		"FungibleToken": {
 			"source": "./cadence/contracts/interfaces/FungibleToken.cdc",
@@ -46,13 +47,7 @@
 	"deployments": {
 		"testnet": {
 			"testnet": [
-				"Content",
-				"LancetNFT",
-				"LancetToken",
-				"FungibleToken",
-				"NonFungibleToken",
-				"MentorsContract",
-				"UserProfileContract"
+				"Communities"
 			]
 		}
 	}
