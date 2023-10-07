@@ -3,16 +3,27 @@ import Lancet from 0xc3e6f27ffe0f6956
 
 pub contract UserProfileContract {
 
+    pub struct UserProfile {
+        pub var address: Address
+        pub var learningLanguage: String
+        pub var speakingLanguage: String
+        pub var username: String
+    }
+
     // Define the LancetNFT Collection capability
     pub var lancetNFTCollectionCapability: @LancetNFT.Collection{LancetNFT.CollectionPublic}
     pub var lancetVaultCapability: @Lancet.Vault
-    pub var address: Address
-    pub var learningLanguage: String
-    pub var speakingLanguage: String
-    pub var username: String
+    pub var UserProfile: UserProfile
+    
 
     init(learningLanguage: String, speakingLanguage: String, username: String) {
-        self.address = self.account.address
+        self.UserProfile = UserProfile(
+            self.address = self.account.address
+            self.learningLanguage = learningLanguage
+            self.speakingLanguage = speakingLanguage
+            self.username = username
+        )
+        
         self.lancetNFTCollectionCapability = getAccount(self.address)
             .getCapability<&LancetNFT.Collection{LancetNFT.CollectionPublic}>(
                 /public/LancetNFTCollection
@@ -26,10 +37,6 @@ pub contract UserProfileContract {
             )
             .borrow()
             ?? panic("Could not borrow Lancet Vault capability")
-
-        self.learningLanguage = learningLanguage
-        self.speakingLanguage = speakingLanguage
-        self.username = username
     }
 
     // Function to view the LancetNFTs owned by the user
@@ -74,15 +81,22 @@ pub contract UserProfileContract {
         return self.lancetVaultCapability.balance
     }
 
+    // Function to update the user profile if the user tries making changes
+    pub fun updateUserProfile(learningLanguage: String, speakingLanguage: String, username: String) {
+        self.UserProfile.learningLanguage = learningLanguage
+        self.UserProfile.speakingLanguage = speakingLanguage
+        self.UserProfile.username = username
+    }
+
     pub fun getSpeakingLanguage(): String {
-        return self.speakingLanguage
+        return self.UserProfile.speakingLanguage
     }
 
     pub fun getLearningLanguage(): String {
-        return self.learningLanguage
+        return self.UserProfile.learningLanguage
     }
 
     pub fun getUsername(): String {
-        return self.username
+        return self.UserProfile.username
     }
 }
